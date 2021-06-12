@@ -4,6 +4,14 @@
 name: Code Format Check
 
 on: [push, pull_request]
+  paths-ignore:
+    - 'AUTHORS'
+    - 'LICENSE'
+    - 'NOTICE'
+    - '**.md'
+    - '.gitignore'
+  tags-ignore:
+    - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   check:

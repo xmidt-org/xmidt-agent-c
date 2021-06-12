@@ -27,4 +27,3 @@ jobs:
       - uses: DoozyX/clang-format-lint-action@v0.12
         with:
           source: './src'
-          style: '.clang-format'

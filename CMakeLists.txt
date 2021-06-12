@@ -42,7 +42,7 @@ find_cjwt(         PATH ${CJWT_PATH}    VERSION "2.0.0"  GIT_TAG "")
 find_curl(         PATH ${CURL_PATH}    VERSION "7.50.2" GIT_TAG "")
 find_curlws(       PATH ${CURLWS_PATH}  VERSION "1.0.3"  GIT_TAG "")
 find_libuuid(      PATH ${UUID_PATH})
-find_msgpack(      PATH ${MSGPACK_PATH} VERSION "3.1.0"  GIT_TAG "")
+find_msgpack(      PATH ${MSGPACK_PATH} VERSION "3.1.0"  GIT_TAG "cpp-310")
 find_trower_base64(PATH ${TROWER_PATH}  VERSION "1.2.0"  GIT_TAG "")
 find_wrpc(         PATH ${WRPC_PATH}    VERSION "1.1.1"  GIT_TAG "")
 

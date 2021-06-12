@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
+# SPDX-License-Identifier: Apache-2.0
+
+name: Code Format Check
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    name: Code Format Check
+    runs-on: [ ubuntu-latest ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: DoozyX/clang-format-lint-action@v0.12
+        with:
+          source: './src'
+          style: '.clang-format'

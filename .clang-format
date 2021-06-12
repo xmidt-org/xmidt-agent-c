@@ -1,0 +1,5 @@
+BasedOnStyle: WebKit
+AlignConsecutiveAssignments: Consecutive
+AlignTrailingComments: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: WithoutElse

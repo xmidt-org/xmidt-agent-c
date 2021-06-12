@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
 # SPDX-License-Identifier: Apache-2.0
 
-name: Code Format Check
+name: Code Style Check
 
 on:
   pull_request:
@@ -19,7 +19,7 @@ on:
 
 jobs:
   check:
-    name: Code Format Check
+    name: Code Style Check
     runs-on: [ ubuntu-latest ]
 
     steps:

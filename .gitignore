@@ -8,6 +8,9 @@ tags
 *.o
 *.a
 *.so
+*.key
+*.crt
+*.pem
 
 # Folders
 _obj

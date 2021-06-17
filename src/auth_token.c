@@ -114,7 +114,7 @@ static int append_string(struct curl_slist **list, const char *key, const char *
 }
 
 
-static int append_int(struct curl_slist **list, const char *key, int *val)
+static int append_int(struct curl_slist **list, const char *key, const int *val)
 {
     if (!val) {
         return 0;

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 - Initial group of boilerplate files.
+- Add a few basic utils for strings.
+- Add the auth_token_req() function and support code.
 
 ## [0.0.0]
 ### Added

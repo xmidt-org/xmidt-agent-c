@@ -124,4 +124,3 @@ struct auth_response {
 CURLcode auth_token_req(const struct auth_info *in, struct auth_response *r);
 
 #endif
-

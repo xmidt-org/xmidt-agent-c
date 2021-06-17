@@ -55,6 +55,7 @@ include_directories(${OPENSSL_INCLUDE_DIRS})
 # Process the subdirectories now
 ################################################################################
 
+add_subdirectory(examples)
 add_subdirectory(src)
 
 if (BUILD_TESTING)

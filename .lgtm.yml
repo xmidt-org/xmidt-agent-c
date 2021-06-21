@@ -17,7 +17,8 @@ extraction:
             packages:
                 - cmake
                 - libcjson
-                - libtrower-base64
+                - libcurl
+                - libmsgpack
                 - libopenssl
         configure:
             command:
@@ -28,4 +29,3 @@ extraction:
             build_command:
                 - cd build
                 - make
-

@@ -16,9 +16,9 @@ extraction:
         prepare:
             packages:
                 - cmake
-                - libcjson
-                - libcurl
-                - libmsgpack
+                - libcjson-dev
+                - libcurl4-openssl-dev
+                - libmsgpack-dev
                 - libopenssl
         configure:
             command:

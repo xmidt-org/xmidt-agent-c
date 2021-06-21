@@ -5,6 +5,7 @@ target_sources(xmidt-agent
     PRIVATE
         main.c
         auth_token.c
+        time.c
         utils.c
 )
 

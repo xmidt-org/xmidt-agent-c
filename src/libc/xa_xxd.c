@@ -44,7 +44,7 @@ void xxd(const void *buffer, size_t length, FILE *stream)
     const char hex[17] = "0123456789abcdef";
     char text[16];
     const char *data = (const char *)buffer;
-    const char *end = &data[length];
+    const char *end;
     size_t line = 0;
 
     if (!buffer || !length) {

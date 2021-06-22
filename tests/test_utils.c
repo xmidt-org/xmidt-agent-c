@@ -155,6 +155,25 @@ void test_xa_memdup()
 }
 
 
+void test_xa_memappend()
+{
+    void *p = NULL;
+    size_t len = 0;
+
+    CU_ASSERT_FATAL(0 != xa_memappend(&p, &len, NULL, 0));
+
+    CU_ASSERT_FATAL(0 == xa_memappend(&p, &len, "hello", 5));
+    CU_ASSERT_FATAL(5 == len);
+    CU_ASSERT_NSTRING_EQUAL("hello", p, 5);
+
+    CU_ASSERT_FATAL(0 == xa_memappend(&p, &len, ", world", 7));
+    CU_ASSERT_FATAL(12 == len);
+    CU_ASSERT_NSTRING_EQUAL("hello, world", p, 12);
+
+    free(p);
+}
+
+
 void add_suites(CU_pSuite *suite)
 {
     *suite = CU_add_suite("utils.c tests", NULL, NULL);
@@ -165,6 +184,7 @@ void add_suites(CU_pSuite *suite)
     CU_add_test(*suite, "xa_strncasecmp() Tests", test_xa_strncasecmp);
     CU_add_test(*suite, "xa_saferealloc() Tests", test_xa_saferealloc);
     CU_add_test(*suite, "xa_memdup() Tests", test_xa_memdup);
+    CU_add_test(*suite, "xa_memappend() Tests", test_xa_memappend);
 }
 
 

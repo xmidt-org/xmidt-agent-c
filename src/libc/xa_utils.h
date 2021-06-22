@@ -47,4 +47,22 @@ void *xa_saferealloc(void *ptr, size_t size);
  * @return the pointer to the new memory block, or NULL
  */
 void *xa_memdup(const void *src, size_t len);
+
+
+/**
+ * Appends a specified block of memory to an existing buffer and returns the
+ * new buffer to the caller.  This call uses realloc, so the inputs must be
+ * compatible with that call.
+ *
+ * @note: Resulting buffer is NOT nil terminated.
+ * @note: If there is a malloc failure, the buffer being appended to is freed.
+ *
+ * @param buf     the buffer to append to
+ * @param buf_len the length of the a buffer
+ * @param append  the pointer to the memory to duplicate
+ * @param len     the number of bytes to dupliate
+ *
+ * @return 0 if successful, error otherwise
+ */
+int xa_memappend(void **buf, size_t *buf_len, const void *src, size_t len);
 #endif

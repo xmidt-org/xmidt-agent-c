@@ -146,3 +146,20 @@ void *xa_memdup(const void *src, size_t len)
 
     return dest;
 }
+
+
+int xa_memappend(void **buf, size_t *buf_len, const void *src, size_t len)
+{
+    *buf = xa_saferealloc(*buf, (*buf_len + len));
+
+    if (*buf) {
+        unsigned char *p = *buf;
+        memcpy(&p[*buf_len], src, len);
+        *buf_len += len;
+
+        return 0;
+    }
+
+    *buf_len = 0;
+    return -1;
+}

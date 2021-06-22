@@ -6,8 +6,6 @@
 
 #include <stdint.h>
 
-#include "codes.h"
-
 struct time_metrics {
     /* The last time (seconds from boot) that the real clock was not correctly
      * set based on a query for real time.  0 if never invalid or queried. */
@@ -59,8 +57,6 @@ double time_diff(int64_t start, int64_t end);
 
 /**
  * Gets a copy of the time metrics right now.
- *
- * @return XA_OK on success
  */
-XAcode time_get_metrics(struct time_metrics *m);
+void time_get_metrics(struct time_metrics *m);
 #endif

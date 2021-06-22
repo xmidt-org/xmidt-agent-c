@@ -5,8 +5,6 @@ target_sources(xmidt-agent
     PRIVATE
         main.c
         auth_token.c
-        time.c
-        utils.c
 )
 
 configure_file(xmidt-agent-ver.h.in
@@ -29,3 +27,4 @@ target_link_libraries(xmidt-agent ${WRPC_LIBRARIES})
 
 install(TARGETS xmidt-agent RUNTIME DESTINATION bin)
 
+add_subdirectory(libc)

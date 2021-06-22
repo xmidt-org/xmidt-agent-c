@@ -52,20 +52,20 @@ void xxd(const void *buffer, size_t length, FILE *stream)
         char *text_ptr = text;
 
         /* Output the '0000000:' portion */
-        fputc(hex[(0x0f & (line >> 24))], stream);
-        fputc(hex[(0x0f & (line >> 20))], stream);
-        fputc(hex[(0x0f & (line >> 16))], stream);
-        fputc(hex[(0x0f & (line >> 12))], stream);
-        fputc(hex[(0x0f & (line >> 8))], stream);
-        fputc(hex[(0x0f & (line >> 4))], stream);
-        fputc(hex[(0x0f & (line))], stream);
+        fputc(hex[0x0f & (line >> 24)], stream);
+        fputc(hex[0x0f & (line >> 20)], stream);
+        fputc(hex[0x0f & (line >> 16)], stream);
+        fputc(hex[0x0f & (line >> 12)], stream);
+        fputc(hex[0x0f & (line >> 8)], stream);
+        fputc(hex[0x0f & (line >> 4)], stream);
+        fputc(hex[0x0f & (line)], stream);
         fputc(':', stream);
         fputc(' ', stream);
 
         for (i = 0; i < 16; i++) {
             if (data < end) {
-                fputc(hex[(0x0f & (*data >> 4))], stream);
-                fputc(hex[(0x0f & (*data))], stream);
+                fputc(hex[0x0f & (*data >> 4)], stream);
+                fputc(hex[0x0f & (*data)], stream);
                 if ((' ' <= *data) && (*data <= '~')) {
                     *text_ptr++ = *data;
                 } else {

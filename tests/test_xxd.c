@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2008 Ed Rose, Weston Schmidt */
+/* SPDX-FileCopyrightText: 2008, 2021 Ed Rose, Weston Schmidt */
 /* SPDX-License-Identifier: Apache-2.0 */
 /*
  *  xxd.c - formatted (like xxd) buffer dump

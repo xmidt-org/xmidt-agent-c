@@ -5,6 +5,7 @@ target_sources(xmidt-agent
     PRIVATE
         main.c
         auth_token.c
+        dns_token.c
 )
 
 configure_file(xmidt-agent-ver.h.in
@@ -24,6 +25,7 @@ target_link_libraries(xmidt-agent ${MSGPACK_LIBRARIES})
 target_link_libraries(xmidt-agent ${TROWER_LIBRARIES})
 target_link_libraries(xmidt-agent ${OPENSSL_LIBRARIES})
 target_link_libraries(xmidt-agent ${WRPC_LIBRARIES})
+target_link_libraries(xmidt-agent resolv)
 
 install(TARGETS xmidt-agent RUNTIME DESTINATION bin)
 

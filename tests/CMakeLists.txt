@@ -41,3 +41,13 @@ add_executable(test_time test_time.c ../src/libc/xa_time.c)
 target_link_libraries(test_time gcov)
 target_link_libraries(test_time ${CUNIT_LIBRARIES})
 # ---------------------------------------------------------------------------- #
+
+
+# ---------------------------------------------------------------------------- #
+add_test(NAME test_xxd COMMAND ${MEMORY_CHECK} ./test_xxd)
+
+add_executable(test_xxd test_xxd.c ../src/libc/xa_xxd.c)
+
+target_link_libraries(test_xxd gcov)
+target_link_libraries(test_xxd ${CUNIT_LIBRARIES})
+# ---------------------------------------------------------------------------- #

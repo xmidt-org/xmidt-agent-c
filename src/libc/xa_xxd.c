@@ -47,6 +47,12 @@ void xxd(const void *buffer, size_t length, FILE *stream)
     const char *end = &data[length];
     size_t line = 0;
 
+    if (!buffer || !length) {
+        return;
+    }
+
+    end = &data[length];
+
     while (data < end) {
         size_t i;
         char *text_ptr = text;

@@ -6,4 +6,5 @@ target_sources(xmidt-agent
         xa_ctype.c
         xa_time.c
         xa_utils.c
+        xa_xxd.c
 )

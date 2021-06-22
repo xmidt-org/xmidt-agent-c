@@ -58,7 +58,7 @@ void xxd(const void *buffer, size_t length, FILE *stream)
         fputc(hex[0x0f & (line >> 12)], stream);
         fputc(hex[0x0f & (line >> 8)], stream);
         fputc(hex[0x0f & (line >> 4)], stream);
-        fputc(hex[0x0f & (line)], stream);
+        fputc(hex[0x0f & line], stream);
         fputc(':', stream);
         fputc(' ', stream);
 

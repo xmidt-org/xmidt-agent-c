@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "time.h"
+#include "xa_time.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
@@ -123,15 +123,11 @@ double time_diff(int64_t start, int64_t end)
 }
 
 
-XAcode time_get_metrics(struct time_metrics *m)
+void time_get_metrics(struct time_metrics *m)
 {
-    if (!m) {
-        return XA_INVALID_INPUT;
+    if (m) {
+        pthread_mutex_lock(&__time_mutex);
+        memcpy(m, &__time_metrics, sizeof(struct time_metrics));
+        pthread_mutex_unlock(&__time_mutex);
     }
-
-    pthread_mutex_lock(&__time_mutex);
-    memcpy(m, &__time_metrics, sizeof(struct time_metrics));
-    pthread_mutex_unlock(&__time_mutex);
-
-    return XA_OK;
 }

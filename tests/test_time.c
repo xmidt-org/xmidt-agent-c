@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../src/time.h"
+#include "../src/libc/xa_time.h"
 
 struct test_clock {
     time_t s;
@@ -118,9 +118,9 @@ void test_metrics()
     __mono = mono;
     __rt = rt;
 
-    CU_ASSERT(XA_INVALID_INPUT == time_get_metrics(NULL));
+    time_get_metrics(NULL);
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(0LL == m.last_invalid);
     CU_ASSERT(0LL == m.first_valid);
     CU_ASSERT(0 == m.invalid_count);
@@ -128,7 +128,7 @@ void test_metrics()
 
     CU_ASSERT(0 == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(0LL == m.last_invalid);
     CU_ASSERT(0LL == m.first_valid);
     CU_ASSERT(1 == m.invalid_count);
@@ -137,7 +137,7 @@ void test_metrics()
 
     CU_ASSERT(0 == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(100LL == m.last_invalid);
     CU_ASSERT(0LL == m.first_valid);
     CU_ASSERT(2 == m.invalid_count);
@@ -145,7 +145,7 @@ void test_metrics()
 
     CU_ASSERT(0 == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(100LL == m.last_invalid);
     CU_ASSERT(0LL == m.first_valid);
     CU_ASSERT(3 == m.invalid_count);
@@ -153,7 +153,7 @@ void test_metrics()
 
     CU_ASSERT(1577836900LL == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(100LL == m.last_invalid);
     CU_ASSERT(110LL == m.first_valid);
     CU_ASSERT(3 == m.invalid_count);
@@ -161,7 +161,7 @@ void test_metrics()
 
     CU_ASSERT(1577836901LL == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(100LL == m.last_invalid);
     CU_ASSERT(110LL == m.first_valid);
     CU_ASSERT(3 == m.invalid_count);
@@ -169,7 +169,7 @@ void test_metrics()
 
     CU_ASSERT(0 == time_now_s());
 
-    CU_ASSERT(XA_OK == time_get_metrics(&m));
+    time_get_metrics(&m);
     CU_ASSERT(100LL == m.last_invalid);
     CU_ASSERT(110LL == m.first_valid);
     CU_ASSERT(4 == m.invalid_count);

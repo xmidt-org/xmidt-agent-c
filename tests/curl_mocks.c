@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../src/utils.h"
+#include "../src/libc/xa_utils.h"
 
 #define SEEN_AND_NEXT(type)    \
     do {                       \

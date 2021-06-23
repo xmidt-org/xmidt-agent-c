@@ -4,6 +4,7 @@
 target_sources(xmidt-agent
     PRIVATE
         xa_ctype.c
+        xa_file.c
         xa_time.c
         xa_utils.c
         xa_xxd.c

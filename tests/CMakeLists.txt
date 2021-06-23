@@ -24,12 +24,12 @@ target_link_libraries(test_auth_token ${CURL_LIBRARIES})
 
 
 # ---------------------------------------------------------------------------- #
-add_test(NAME test_utils COMMAND ${MEMORY_CHECK} ./test_utils)
+add_test(NAME test_file COMMAND ${MEMORY_CHECK} ./test_file)
 
-add_executable(test_utils test_utils.c ../src/libc/xa_utils.c)
+add_executable(test_file test_file.c ../src/libc/xa_file.c)
 
-target_link_libraries(test_utils gcov)
-target_link_libraries(test_utils ${CUNIT_LIBRARIES})
+target_link_libraries(test_file gcov)
+target_link_libraries(test_file ${CUNIT_LIBRARIES})
 # ---------------------------------------------------------------------------- #
 
 
@@ -40,6 +40,16 @@ add_executable(test_time test_time.c ../src/libc/xa_time.c)
 
 target_link_libraries(test_time gcov)
 target_link_libraries(test_time ${CUNIT_LIBRARIES})
+# ---------------------------------------------------------------------------- #
+
+
+# ---------------------------------------------------------------------------- #
+add_test(NAME test_utils COMMAND ${MEMORY_CHECK} ./test_utils)
+
+add_executable(test_utils test_utils.c ../src/libc/xa_utils.c)
+
+target_link_libraries(test_utils gcov)
+target_link_libraries(test_utils ${CUNIT_LIBRARIES})
 # ---------------------------------------------------------------------------- #
 
 

@@ -73,8 +73,16 @@ int fslirp(const char *filename, size_t max, void **data, size_t *len)
     *len = 0;
     *data = malloc(file_len);
     if (*data) {
-        fread(*data, 1, file_len, f);
-        *len = (size_t)file_len;
+        char *p = (char *)*data;
+        size_t want = (size_t)file_len;
+        size_t have = 0;
+
+        while (!feof(f) && (0 < want)) {
+            size_t got = fread(p, 1, want, f);
+            p += got;
+            have += got;
+        }
+        *len = have;
     }
     fclose(f);
 

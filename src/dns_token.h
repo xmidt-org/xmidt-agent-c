@@ -83,6 +83,6 @@ struct dns_token_out {
  *
  * @return 0 if successful, error otherwise
  */
-XAcode dns_token_fetch(struct dns_token_in *in, struct dns_token_out *out);
+XAcode dns_token_fetch(const struct dns_token_in *in, struct dns_token_out *out);
 
 #endif

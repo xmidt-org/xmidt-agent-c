@@ -56,10 +56,10 @@
  *         XA_REFUSED         - fatal
  *         XA_UNKNOWN_VALUE   - retry
  */
-static XAcode check_response(unsigned char *buf, int len, ns_msg *msg,
+static XAcode check_response(const unsigned char *buf, int len, ns_msg *msg,
                              XAcode *err)
 {
-    uint16_t rcode = 0;
+    int rcode = 0;
 
     /* Parse response */
     if ((0 != ns_initparse(buf, len, msg))
@@ -213,7 +213,7 @@ static XAcode reassemble(ns_msg *msg, char **out, size_t *out_len, XAcode *err)
 }
 
 
-static XAcode query_dns(struct dns_token_in *in, struct dns_token_out *out,
+static XAcode query_dns(const struct dns_token_in *in, struct dns_token_out *out,
                         int64_t *time)
 {
     ns_msg msg;
@@ -262,7 +262,7 @@ static XAcode query_dns(struct dns_token_in *in, struct dns_token_out *out,
 /*----------------------------------------------------------------------------*/
 /*                             External Functions                             */
 /*----------------------------------------------------------------------------*/
-XAcode dns_token_fetch(struct dns_token_in *in, struct dns_token_out *out)
+XAcode dns_token_fetch(const struct dns_token_in *in, struct dns_token_out *out)
 {
     XAcode rv;
     int64_t start_time = time_boot_now_ns();

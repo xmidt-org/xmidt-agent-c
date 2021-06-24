@@ -109,9 +109,11 @@ int main(int argc, char *argv[])
         print_usage(argv[0]);
     }
 
-    if (0 != fslirp(key_file, 0, (void **)&in.key, &in.len)) {
-        printf("Failed to open the file: %s\n", key_file);
-        return -1;
+    if (key_file) {
+        if (0 != fslirp(key_file, 0, (void **)&in.key, &in.len)) {
+            printf("Failed to open the file: %s\n", key_file);
+            return -1;
+        }
     }
 
     rv = dns_token_fetch(&in, &out);

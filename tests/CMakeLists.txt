@@ -24,6 +24,25 @@ target_link_libraries(test_auth_token ${CURL_LIBRARIES})
 
 
 # ---------------------------------------------------------------------------- #
+add_test(NAME test_dns_token COMMAND ${MEMORY_CHECK} ./test_dns_token)
+
+add_executable(test_dns_token test_dns_token.c
+                              ../src/dns_token.c
+                              ../src/libc/xa_time.c
+                              ../src/libc/xa_utils.c
+                              ../src/libc/xa_xxd.c)
+
+target_link_libraries(test_dns_token gcov)
+target_link_libraries(test_dns_token ${CJWT_LIBRARIES})
+target_link_libraries(test_dns_token ${CJSON_LIBRARIES})
+target_link_libraries(test_dns_token ${OPENSSL_LIBRARIES})
+target_link_libraries(test_dns_token ${TROWER_LIBRARIES})
+target_link_libraries(test_dns_token ${CUNIT_LIBRARIES})
+target_link_libraries(test_dns_token resolv)
+# ---------------------------------------------------------------------------- #
+
+
+# ---------------------------------------------------------------------------- #
 add_test(NAME test_file COMMAND ${MEMORY_CHECK} ./test_file)
 
 add_executable(test_file test_file.c ../src/libc/xa_file.c)

@@ -34,7 +34,7 @@ function(find_curl)
               NO_DEFAULT_PATH)
 
     find_library(CURL_LIBRARY_DIR
-                 NAMES "libcurl.so"
+                 NAMES "libcurl.so" "curl" "libcurl"
                  PATHS "${CMAKE_CURRENT_BINARY_DIR}/${CURL_PATH}"
                  PATH_SUFFIXES "lib" "lib64"
                  NO_DEFAULT_PATH)

@@ -5,6 +5,7 @@ target_sources(xmidt-agent
     PRIVATE
         main.c
         auth_token.c
+        dns_token.c
 )
 
 configure_file(xmidt-agent-ver.h.in

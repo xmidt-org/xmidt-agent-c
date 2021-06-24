@@ -40,11 +40,13 @@ function(find_cjson)
         NO_DEFAULT_PATH)
 
     find_library(CJSON_LIBRARY_DIR
-                 NAMES "libcjson.so"
+                 NAMES "libcjson.so" "cjson" "libcjson"
                  PATHS "${CMAKE_CURRENT_BINARY_DIR}/${CJSON_PATH}"
                  PATH_SUFFIXES "lib" "lib64"
                  NO_DEFAULT_PATH)
 
+    message(STATUS "CJSON_INCLUDE_DIR = \"${CJSON_INCLUDE_DIR}\"")
+    message(STATUS "CJSON_LIBRARY_DIR = \"${CJSON_LIBRARY_DIR}\"")
     if (NOT (CJSON_INCLUDE_DIR MATCHES "-NOTFOUND" OR CJSON_LIBRARY_DIR MATCHES "-NOTFOUND"))
         message(STATUS "Found user specified cjson (at: \"${CJSON_PATH}\")")
         include_directories(SYSTEM ${CJSON_INCLUDE_DIR})
@@ -59,13 +61,16 @@ function(find_cjson)
         else()
             include(ExternalProject)
             
-            message(STATUS "Fetching upstream cjson")
+            message(STATUS "Fetching upstream cjson (tag \"${CJSON_GIT_TAG}\")")
             ExternalProject_Add(cjson
                 PREFIX ${LOCAL_PREFIX_DIR}/cjson
                 GIT_REPOSITORY https://github.com/DaveGamble/cJSON.git
                 GIT_TAG ${CJSON_GIT_TAG}
-                CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LOCAL_INSTALL_DIR} -DBUILD_TESTING=OFF)
-            add_library(libcjson STATIC IMPORTED)
+                CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${LOCAL_INSTALL_DIR}
+                -DCMAKE_INSTALL_FULL_LIBDIR=${LOCAL_LIBRARY_DIR}
+                -DCMAKE_INSTALL_FULL_INCLUDEDIR=${LOCAL_INCLUDE_DIR}
+                -DBUILD_TESTING=OFF)
+            add_library(libcjson SHARED IMPORTED)
             add_dependencies(libcjson cjson)
             add_dependencies(${CMAKE_PROJECT_NAME} cjson)
             include_directories(SYSTEM ${LOCAL_INCLUDE_DIR})

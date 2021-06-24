@@ -33,11 +33,11 @@ add_executable(test_dns_token test_dns_token.c
                               ../src/libc/xa_xxd.c)
 
 target_link_libraries(test_dns_token gcov)
-target_link_libraries(test_dns_token ${CUNIT_LIBRARIES})
-target_link_libraries(test_dns_token ${CJSON_LIBRARIES})
 target_link_libraries(test_dns_token ${CJWT_LIBRARIES})
+target_link_libraries(test_dns_token ${CJSON_LIBRARIES})
 target_link_libraries(test_dns_token ${OPENSSL_LIBRARIES})
 target_link_libraries(test_dns_token ${TROWER_LIBRARIES})
+target_link_libraries(test_dns_token ${CUNIT_LIBRARIES})
 target_link_libraries(test_dns_token resolv)
 # ---------------------------------------------------------------------------- #
 

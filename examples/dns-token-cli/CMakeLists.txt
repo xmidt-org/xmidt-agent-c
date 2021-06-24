@@ -19,8 +19,8 @@ target_sources(dns_token_cli
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 
-target_link_libraries(dns_token_cli ${CJSON_LIBRARIES})
 target_link_libraries(dns_token_cli ${CJWT_LIBRARIES})
+target_link_libraries(dns_token_cli ${CJSON_LIBRARIES})
 target_link_libraries(dns_token_cli ${OPENSSL_LIBRARIES})
 target_link_libraries(dns_token_cli ${TROWER_LIBRARIES})
 target_link_libraries(dns_token_cli resolv)

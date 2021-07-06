@@ -78,7 +78,7 @@ static XAcode skip_name(const struct dns_response *resp, int *i, XAcode *err)
 }
 
 
-static XAcode skip_question(struct dns_response *resp, int *i, XAcode *err)
+static XAcode skip_question(const struct dns_response *resp, int *i, XAcode *err)
 {
     XAcode e = XA_OK;
 

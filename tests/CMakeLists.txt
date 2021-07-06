@@ -24,21 +24,22 @@ target_link_libraries(test_auth_token ${CURL_LIBRARIES})
 
 
 # ---------------------------------------------------------------------------- #
-add_test(NAME test_dns_token COMMAND ${MEMORY_CHECK} ./test_dns_token)
+add_test(NAME test_dns_txt COMMAND ${MEMORY_CHECK} ./test_dns_txt)
 
-add_executable(test_dns_token test_dns_token.c
-                              ../src/dns_token.c
+add_executable(test_dns_txt test_dns_txt.c
+                              ../src/codes.c
+                              ../src/dns_txt.c
                               ../src/libc/xa_time.c
                               ../src/libc/xa_utils.c
                               ../src/libc/xa_xxd.c)
 
-target_link_libraries(test_dns_token gcov)
-target_link_libraries(test_dns_token ${CJWT_LIBRARIES})
-target_link_libraries(test_dns_token ${CJSON_LIBRARIES})
-target_link_libraries(test_dns_token ${OPENSSL_LIBRARIES})
-target_link_libraries(test_dns_token ${TROWER_LIBRARIES})
-target_link_libraries(test_dns_token ${CUNIT_LIBRARIES})
-target_link_libraries(test_dns_token resolv)
+target_link_libraries(test_dns_txt gcov)
+target_link_libraries(test_dns_txt ${CJWT_LIBRARIES})
+target_link_libraries(test_dns_txt ${CJSON_LIBRARIES})
+target_link_libraries(test_dns_txt ${OPENSSL_LIBRARIES})
+target_link_libraries(test_dns_txt ${TROWER_LIBRARIES})
+target_link_libraries(test_dns_txt ${CUNIT_LIBRARIES})
+target_link_libraries(test_dns_txt resolv)
 # ---------------------------------------------------------------------------- #
 
 

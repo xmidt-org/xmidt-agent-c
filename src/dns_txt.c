@@ -46,7 +46,7 @@ static uint32_t get_u32(const uint8_t *buf, int i)
 }
 
 
-static XAcode skip_name(struct dns_response *resp, size_t *i, XAcode *err)
+static XAcode skip_name(const struct dns_response *resp, int *i, XAcode *err)
 {
     uint8_t len;
 
@@ -78,7 +78,7 @@ static XAcode skip_name(struct dns_response *resp, size_t *i, XAcode *err)
 }
 
 
-static XAcode skip_question(struct dns_response *resp, size_t *i, XAcode *err)
+static XAcode skip_question(struct dns_response *resp, int *i, XAcode *err)
 {
     XAcode e = XA_OK;
 
@@ -94,7 +94,7 @@ static XAcode skip_question(struct dns_response *resp, size_t *i, XAcode *err)
 }
 
 
-static XAcode skip_questions(struct dns_response *resp, size_t *i,
+static XAcode skip_questions(struct dns_response *resp, int *i,
                              uint16_t count, XAcode *err)
 {
     for (uint16_t c = 0; c < count; c++) {
@@ -122,7 +122,7 @@ static void dns_rr_append(struct dns_rr **list, struct dns_rr *item)
 }
 
 
-static XAcode process_rr(struct dns_response *resp, size_t *i, XAcode *err)
+static XAcode process_rr(struct dns_response *resp, int *i, XAcode *err)
 {
     struct dns_rr r;
 
@@ -165,7 +165,7 @@ static XAcode process_rr(struct dns_response *resp, size_t *i, XAcode *err)
 }
 
 
-static XAcode process_answers(struct dns_response *resp, size_t *i, XAcode *err)
+static XAcode process_answers(struct dns_response *resp, int *i, XAcode *err)
 {
     for (uint16_t c = 0; c < resp->answer_count; c++) {
         if (XA_OK != process_rr(resp, i, err)) {
@@ -182,7 +182,7 @@ static XAcode process_dns_response(struct dns_response *resp, XAcode *err)
     int rcode = 0;
     uint16_t qdcount = 0;
     uint16_t ancount = 0;
-    size_t i = 0;
+    int i = 0;
 
     if (resp->len < 12) {
         return xa_set_error(err, XA_DNS_RECORD_TOO_SHORT);
@@ -383,6 +383,7 @@ XAcode dns_token_assemble(const struct dns_response *resp,
     int fragment = 0;
     int last_frag = -1;
     struct dns_xmidt_token t;
+    XAcode e = XA_OK;
 
     if (!resp || !token) {
         return xa_set_error(err, XA_INVALID_INPUT);
@@ -398,13 +399,8 @@ XAcode dns_token_assemble(const struct dns_response *resp,
 
         rr = resp->answers;
         while (rr) {
-            XAcode e = XA_OK;
-
             if (XA_OK != append_frag(rr, &fragment, &t, &e)) {
-                if (t.buf) {
-                    free(t.buf);
-                }
-                return xa_set_error(err, e);
+                goto ERROR;
             }
             rr = rr->next;
         }
@@ -415,10 +411,15 @@ XAcode dns_token_assemble(const struct dns_response *resp,
     }
 
     *token = xa_memdup(&t, sizeof(struct dns_xmidt_token));
-    if (NULL == *token) {
-        free(t.buf);
-        return xa_set_error(err, XA_OUT_OF_MEMORY);
+    if (NULL != *token) {
+        return XA_OK;
     }
 
-    return XA_OK;
+    e = XA_OUT_OF_MEMORY;
+
+ERROR:
+    if (t.buf) {
+        free(t.buf);
+    }
+    return xa_set_error(err, e);
 }

@@ -94,7 +94,7 @@ static XAcode skip_question(const struct dns_response *resp, int *i, XAcode *err
 }
 
 
-static XAcode skip_questions(struct dns_response *resp, int *i,
+static XAcode skip_questions(const struct dns_response *resp, int *i,
                              uint16_t count, XAcode *err)
 {
     for (uint16_t c = 0; c < count; c++) {

@@ -42,7 +42,10 @@ static uint16_t get_u16(const uint8_t *buf, int i)
 
 static uint32_t get_u32(const uint8_t *buf, int i)
 {
-    return (uint32_t)((buf[i] << 24) | (buf[i + 1] << 16) | (buf[i + 2] << 8) | buf[i + 3]);
+    return (uint32_t)(((0xff & buf[i]) << 24)
+                      | ((0xff & buf[i + 1]) << 16)
+                      | ((0xff & buf[i + 2]) << 8)
+                      | (0xff & buf[i + 3]));
 }
 
 

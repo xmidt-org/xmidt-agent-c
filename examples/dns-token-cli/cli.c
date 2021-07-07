@@ -11,7 +11,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../src/dns_token.h"
+#include <cjwt/cjwt.h>
+
+#include "../../src/dns_txt.h"
 #include "../../src/libc/xa_file.h"
 #include "../../src/libc/xa_time.h"
 #include "../../src/libc/xa_xxd.h"
@@ -71,15 +73,24 @@ void print_usage(char *name)
 /*----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-    struct dns_token_in in;
-    struct dns_token_out out;
-    XAcode rv;
+    XAcode rv = XA_OK;
+    struct dns_response *resp = NULL;
+    struct dns_xmidt_token *token = NULL;
+    cjwt_t *jwt = NULL;
     const char *key_file = NULL;
+    const char *fqdn = NULL;
+    int64_t skew = 0;
+    int64_t now = 0;
+    uint8_t *pub_key = NULL;
+    size_t pub_key_len = 0;
+    bool verbose = false;
 
-    memset(&in, 0, sizeof(struct dns_token_in));
-    memset(&out, 0, sizeof(struct dns_token_out));
+    int64_t start_time = 0;
+    int64_t fetch_time = 0;
+    int64_t assembled_time = 0;
+    int64_t jwt_time = 0;
 
-    in.now = time_now_s();
+    now = time_now_s();
 
     /* Very simple args parser. */
     for (int i = 1; i < argc; i++) {
@@ -89,79 +100,88 @@ int main(int argc, char *argv[])
         } else if (is_opt(argv[i], NULL, "--interface")) {
             i++;
         } else if (is_opt(argv[i], "-v", "--verbose")) {
-            in.keep_debug_bufs = true;
+            verbose = true;
         } else if (is_opt(argv[i], "-k", "--key")) {
             i++;
             key_file = argv[i];
         } else if (is_opt(argv[i], "-n", "--now")) {
             i++;
-            in.now = atoll(argv[i]);
+            now = atoll(argv[i]);
         } else if (is_opt(argv[i], NULL, "--skew")) {
             i++;
-            in.skew = atoll(argv[i]);
+            skew = atoll(argv[i]);
         } else {
-            in.fqdn = argv[i];
+            fqdn = argv[i];
             break;
         }
     }
 
-    if (!in.fqdn) {
+    if (!fqdn) {
         print_usage(argv[0]);
     }
 
     if (key_file) {
-        if (0 != fslirp(key_file, 0, (void **)&in.key, &in.len)) {
+        if (0 != fslirp(key_file, 0, (void **)&pub_key, &pub_key_len)) {
             printf("Failed to open the file: %s\n", key_file);
             return -1;
         }
     }
 
-    rv = dns_token_fetch(&in, &out);
+    start_time = time_boot_now_ns();
 
-    printf("in: fqdn: %s\n", in.fqdn);
-    printf("in:  now: %" PRId64 "\n", in.now);
-    printf("in: skew: %" PRId64 "\n", in.skew);
-    printf("dns_token_fetch(): %d\n", rv);
-    printf(" dns fetch time: %.6f s\n", out.fetch_time);
-    printf("processing time: %.6f s\n", (out.total_time - out.fetch_time));
-    printf("     total time: %.6f s\n", out.total_time);
+    rv = dns_txt_fetch(fqdn, &resp, NULL);
+    if (XA_OK != rv) {
+        printf("Unable to fetch a TXT record for the fqdn: '%s'\n", fqdn);
+        return -1;
+    }
 
-    if (out.raw_dns) {
+    fetch_time = time_boot_now_ns();
+
+    rv = dns_token_assemble(resp, &token, NULL);
+    if (XA_OK != rv) {
+        printf("Unable to reassemble the text record.\n\n");
+        xxd(resp->full, resp->len, stdout);
+        dns_destroy_response(resp);
+        return -1;
+    }
+
+    assembled_time = time_boot_now_ns();
+
+    if (CJWTE_OK != cjwt_decode(token->buf, token->len, 0, pub_key, pub_key_len, now, skew, &jwt)) {
+        printf("Unable to decode the jwt from the text record.\n");
+        printf("jwt:\n'%.*s'\nttl: %ud\n\n", (int)token->len, token->buf, token->ttl);
+        printf("Original DNS record:\n");
+        xxd(resp->full, resp->len, stdout);
+        dns_destroy_response(resp);
+        return -1;
+    }
+    jwt_time = time_boot_now_ns();
+
+    printf("          fqdn: %s\n", fqdn);
+    printf("          time: %" PRId64 "\n", now);
+    printf("          skew: %" PRId64 "\n", skew);
+    printf("dns fetch time: %.6f s\n", time_diff(start_time, fetch_time));
+    printf(" assembly time: %.6f s\n", time_diff(fetch_time, assembled_time));
+    printf("      jwt time: %.6f s\n", time_diff(assembled_time, jwt_time));
+    printf("    total time: %.6f s\n", time_diff(start_time, jwt_time));
+
+    if (verbose) {
         printf("\nThe raw dns response:\n");
-        xxd(out.raw_dns, out.raw_dns_len, stdout);
-    } else {
-        if (in.keep_debug_bufs) {
-            printf("\nThere was an performing the dns request.\n");
-        }
+        xxd(resp->full, resp->len, stdout);
     }
 
-    if (out.reassembled) {
-        printf("\nThe reassembled buffer:\n%.*s\n", (int)out.reassembled_len, out.reassembled);
-
-        free(out.reassembled);
-        out.reassembled = NULL;
-    } else {
-        if (in.keep_debug_bufs) {
-            printf("\nThere was an error prior to or during buffer reassembly.\n");
-        }
+    if (verbose) {
+        printf("\nThe reassembed buffer:\n'%.*s'\nttl: %ud\n\n", (int)token->len, token->buf, token->ttl);
     }
 
-    if (out.jwt) {
+    if (verbose) {
         printf("\nThe complete jwt:\n");
-        cjwt_print(stdout, out.jwt);
-        cjwt_destroy(out.jwt);
-    } else {
-        if (CJWTE_OK == out.cjwt_rv) {
-            printf("\nThere was an error prior to processing the jwt.\n");
-        } else {
-            printf("\nThe jwt processing had an error: %d\n", out.cjwt_rv);
-        }
+        cjwt_print(stdout, jwt);
     }
 
-    if (out.raw_dns) {
-        free(out.raw_dns);
-        out.raw_dns = NULL;
-    }
+    dns_destroy_response(resp);
+    dns_destroy_token(token);
+    cjwt_destroy(jwt);
 
     return 0;
 }

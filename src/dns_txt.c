@@ -36,7 +36,7 @@
 
 static uint16_t get_u16(const uint8_t *buf, int i)
 {
-    return (uint16_t)((buf[i] << 8) | buf[i + 1]);
+    return (uint16_t)(((0xff & buf[i]) << 8) | (0xff & buf[i + 1]));
 }
 
 

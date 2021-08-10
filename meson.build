@@ -5,7 +5,7 @@
 
 project('xmidt-agent', 'c',
         version: '0.0.1',
-        license: ['Apache-2.0'],
+        license: ['Apache-2.0', 'MIT'],
         default_options: ['c_std=c99',
                           'b_coverage=true'])
 
@@ -14,6 +14,11 @@ warning_level = 3   # -Wall
 werror = true
 
 cc = meson.get_compiler('c')
+
+################################################################################
+# Generate the version header file
+################################################################################
+subdir('src')
 
 ################################################################################
 # Define the dependencies

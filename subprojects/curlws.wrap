@@ -1,0 +1,9 @@
+[wrap-file]
+directory = curlws-1.0.4
+
+source_filename = curlws-1.0.4.tar.gz
+source_url = https://github.com/xmidt-org/curlws/releases/download/v1.0.4/curlws-1.0.4.tar.gz
+source_hash = 8593477f9686f51bd1b687e347d25755499fc97c5dbc1342dbc4e2f6941a9c5d
+
+[provides]
+libtrower_base64 = libtrower_base64_dep

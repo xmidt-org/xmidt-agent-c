@@ -23,28 +23,30 @@ subdir('src')
 ################################################################################
 # Define the dependencies
 ################################################################################
-cjwt_dep             = dependency('cjwt',          version: '>=2.0.1')
+cjwt_dep             = dependency('cjwt',          version: '>=2.0.1', required: get_option('dns-txt-token'))
 curl_dep             = dependency('libcurl',       version: '>=7.50.2')
+curlws_dep           = dependency('curlws',        version: '>=1.0.4')
 cutils_dep           = dependency('cutils',        version: '>=1.0.0')
 libcjson_dep         = dependency('libcjson',      version: '>=1.7.14', fallback: ['cjson'])
 libtrower_base64_dep = dependency('trower-base64', version: '>=1.2.7')
 ludocode_mpack_dep   = dependency('mpack',         version: '>=1.0', fallback: ['ludocode-mpack', 'ludocode_mpack_dep'])
-openssl_dep          = dependency('openssl',       version: '>=1.1.1')
 uuid_dep             = dependency('uuid')
 wrpc_dep             = dependency('wrp-c',         version: '>=2.0.0')
 
-resolv_dep = cc.find_library('resolv')
+resolv_dep = cc.find_library('resolv', required: get_option('dns-txt-token'))
 
-all_dep = [ludocode_mpack_dep,
+all_dep = [curl_dep,
+           curlws_dep,
            cutils_dep,
-           curl_dep,
-           openssl_dep,
-           uuid_dep,
            libcjson_dep,
            libtrower_base64_dep,
-           cjwt_dep,
-           wrpc_dep,
-           resolv_dep]
+           ludocode_mpack_dep,
+           uuid_dep,
+           wrpc_dep]
+
+if get_option('dns-txt-token')
+  all_dep += [cjwt_dep, resolv_dep]
+endif
 
 ################################################################################
 # Define the main program

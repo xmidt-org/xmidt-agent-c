@@ -13,10 +13,11 @@
 
 #include <cjwt/cjwt.h>
 
+#include <cutils/file.h>
+#include <cutils/xxd.h>
+
 #include "../../src/dns_txt.h"
-#include "../../src/libc/xa_file.h"
-#include "../../src/libc/xa_time.h"
-#include "../../src/libc/xa_xxd.h"
+#include "../../src/time.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
@@ -121,7 +122,7 @@ int main(int argc, char *argv[])
     }
 
     if (key_file) {
-        if (0 != fslirp(key_file, 0, (void **)&pub_key, &pub_key_len)) {
+        if (0 != freadall(key_file, 0, (void **)&pub_key, &pub_key_len)) {
             printf("Failed to open the file: %s\n", key_file);
             return -1;
         }

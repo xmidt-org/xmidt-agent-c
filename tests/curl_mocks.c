@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../src/libc/xa_utils.h"
+#include <cutils/strings.h>
 
 #define SEEN_AND_NEXT(type)    \
     do {                       \
@@ -261,7 +261,7 @@ struct curl_slist *curl_slist_append(struct curl_slist *list, const char *s)
     }
 
     new->next = NULL;
-    new->data = xa_strdup(s);
+    new->data = cu_strdup(s);
     if (!new->data) {
         free(new);
         return NULL;

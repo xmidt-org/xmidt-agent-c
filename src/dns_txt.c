@@ -6,9 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <cutils/memory.h>
+
 #include "codes.h"
 #include "dns_txt.h"
-#include "libc/xa_utils.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
@@ -156,7 +157,7 @@ static XAcode process_rr(struct dns_response *resp, int *i, XAcode *err)
 
         /* Only copy the complete structure.  This eliminates partially complete
          * results. */
-        p = xa_memdup(&r, sizeof(struct dns_rr));
+        p = memdup(&r, sizeof(struct dns_rr));
         if (!p) {
             return xa_set_error(err, XA_OUT_OF_MEMORY);
         }
@@ -282,7 +283,7 @@ static XAcode append_frag(const struct dns_rr *rr, int *last_frag,
         return XA_OK;
     }
 
-    if (0 != xa_memappend((void **)&token->buf, &token->len, &data[3], rdlen - 3)) {
+    if (NULL == memappend((void **)&token->buf, &token->len, &data[3], rdlen - 3)) {
         return xa_set_error(err, XA_OUT_OF_MEMORY);
     }
 
@@ -362,7 +363,7 @@ XAcode dns_txt_fetch(const char *fqdn, struct dns_response **resp, XAcode *err)
     }
 
     p->len = len;
-    p->full = xa_memdup(buf, p->len);
+    p->full = memdup(buf, p->len);
     if (!p->full) {
         free(p);
         return xa_set_error(err, XA_OUT_OF_MEMORY);
@@ -413,7 +414,7 @@ XAcode dns_token_assemble(const struct dns_response *resp,
         return xa_set_error(err, XA_DNS_TOKEN_NOT_PRESENT);
     }
 
-    *token = xa_memdup(&t, sizeof(struct dns_xmidt_token));
+    *token = memdup(&t, sizeof(struct dns_xmidt_token));
     if (NULL != *token) {
         return XA_OK;
     }

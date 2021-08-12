@@ -53,11 +53,7 @@ endif
 ################################################################################
 
 sources = [ 'src/codes.c',
-            'src/libc/xa_ctype.c',
-            'src/libc/xa_file.c',
-            'src/libc/xa_time.c',
-            'src/libc/xa_utils.c',
-            'src/libc/xa_xxd.c',
+            'src/time.c',
             'src/main.c' ]
 
 if get_option('auth-token')
@@ -89,10 +85,7 @@ if get_option('examples')
                [ 'examples/dns-token-cli/cli.c',
                  'src/codes.c',
                  'src/dns_txt.c',
-                 'src/libc/xa_file.c',
-                 'src/libc/xa_time.c',
-                 'src/libc/xa_utils.c',
-                 'src/libc/xa_xxd.c' ],
+                 'src/time.c' ],
                  dependencies: all_dep)
   endif
 endif
@@ -108,25 +101,19 @@ if get_option('tests')
   tests = {
     'test_auth_token': {
       'srcs': [ 'tests/test_auth_token.c',
-                'src/auth_token.c',
-                'src/libc/xa_utils.c'],
-      'deps': [ curl_dep ],
+                'src/auth_token.c'],
+      'deps': [ curl_dep, cutils_dep ],
       'opt': 'auth-token',
     },
     'test_dns_txt': {
       'srcs': [ 'tests/test_dns_txt.c',
                 'src/codes.c',
                 'src/dns_txt.c',
-                'src/libc/xa_time.c',
-                'src/libc/xa_utils.c',
-                'src/libc/xa_xxd.c'],
+                'src/time.c'],
       'deps': [ all_dep ],
       'opt': 'dns-txt-token',
     },
-    'test_xa_file': { 'srcs': ['tests/test_file.c', 'src/libc/xa_file.c'] },
-    'test_xa_time': { 'srcs': ['tests/test_time.c', 'src/libc/xa_time.c'] },
-    'test_xa_utils': { 'srcs': ['tests/test_utils.c', 'src/libc/xa_utils.c'] },
-    'test_xa_xxd': { 'srcs': ['tests/test_xxd.c', 'src/libc/xa_xxd.c'] },
+    'test_time': { 'srcs': ['tests/test_time.c', 'src/time.c'] },
   }
 
   foreach test, vals : tests

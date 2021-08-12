@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "../src/libc/xa_time.h"
+#include "../src/time.h"
 
 struct test_clock {
     time_t s;

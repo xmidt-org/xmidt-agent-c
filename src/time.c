@@ -9,7 +9,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "xa_time.h"
+#include "time.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */

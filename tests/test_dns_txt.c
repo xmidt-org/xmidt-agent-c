@@ -14,9 +14,9 @@
 
 #include <cjwt/cjwt.h>
 
+#include <cutils/xxd.h>
+
 #include "../src/dns_txt.h"
-#include "../src/libc/xa_utils.h"
-#include "../src/libc/xa_xxd.h"
 
 static void set_extra_line_record();
 static void set_normal_record();

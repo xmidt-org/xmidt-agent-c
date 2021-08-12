@@ -10,3 +10,15 @@ License: Apache-2.0
 Files: NOTICE
 Copyright: 2021 Comcast Cable Communications Management, LLC
 License: Apache-2.0
+
+Files: subprojects/cjson.wrap
+Copyright: 2021 Comcast Cable Communications Management, LLC
+License: MIT
+
+Files: subprojects/cjwt.wrap
+Copyright: 2021 Comcast Cable Communications Management, LLC
+License: MIT
+
+Files: subprojects/wrp-c.wrap
+Copyright: 2021 Comcast Cable Communications Management, LLC
+License: MIT

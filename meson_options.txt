@@ -1,0 +1,26 @@
+# -*- mode: meson -*-
+# SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
+# SPDX-License-Identifier: Apache-2.0
+
+####################################################
+# Under each section keep the options alphabetized #
+####################################################
+
+# Executable configuration options
+#-------------------------------------------------------------------------------
+option('auth-token', type: 'boolean', value: 'true',
+       description: 'enables the code to fetch a token for use with the websocket during connection')
+
+option('dns-txt-token', type: 'boolean', value: 'true',
+       description: 'enables the code to fetch a dns txt record and process it as a jwt')
+
+# Build configuration options
+#-------------------------------------------------------------------------------
+option('examples', type: 'boolean', value: 'true',
+       description: 'build the example programs')
+
+
+# Testing configuration options
+#-------------------------------------------------------------------------------
+option('tests', type: 'boolean', value: 'true',
+       description: 'run the basic unit tests')

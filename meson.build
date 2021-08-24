@@ -30,6 +30,7 @@ cutils_dep           = dependency('cutils',        version: '>=1.0.0')
 libcjson_dep         = dependency('libcjson',      version: '>=1.7.14', fallback: ['cjson'])
 libtrower_base64_dep = dependency('trower-base64', version: '>=1.2.7')
 ludocode_mpack_dep   = dependency('mpack',         version: '>=1.0', fallback: ['ludocode-mpack', 'ludocode_mpack_dep'])
+otelc_dep            = dependency('otelc',         version: '>=0.0.0')
 uuid_dep             = dependency('uuid')
 wrpc_dep             = dependency('wrp-c',         version: '>=2.0.0')
 
@@ -41,6 +42,7 @@ all_dep = [curl_dep,
            libcjson_dep,
            libtrower_base64_dep,
            ludocode_mpack_dep,
+           otelc_dep,
            uuid_dep,
            wrpc_dep]
 
@@ -53,7 +55,6 @@ endif
 ################################################################################
 
 sources = [ 'src/codes.c',
-            'src/time.c',
             'src/main.c' ]
 
 if get_option('auth-token')
@@ -84,8 +85,7 @@ if get_option('examples')
     executable('dns_token_cli',
                [ 'examples/dns-token-cli/cli.c',
                  'src/codes.c',
-                 'src/dns_txt.c',
-                 'src/time.c' ],
+                 'src/dns_txt.c'],
                  dependencies: all_dep)
   endif
 endif
@@ -108,12 +108,10 @@ if get_option('tests')
     'test_dns_txt': {
       'srcs': [ 'tests/test_dns_txt.c',
                 'src/codes.c',
-                'src/dns_txt.c',
-                'src/time.c'],
+                'src/dns_txt.c'],
       'deps': [ all_dep ],
       'opt': 'dns-txt-token',
     },
-    'test_time': { 'srcs': ['tests/test_time.c', 'src/time.c'] },
   }
 
   foreach test, vals : tests

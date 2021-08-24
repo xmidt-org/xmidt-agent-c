@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "log.h"
+
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
 /*----------------------------------------------------------------------------*/
@@ -38,5 +40,11 @@ int main(int argc, char *argv[])
     (void)argc;
     (void)argv;
 
+    log_trace("Hello, world.");
+    log_debug("Hello, world.");
+    log_info("Hello, world.");
+    log_warn("Hello, world.");
+    log_error("Hello, world.");
+    log_fatal("Hello, world.");
     return 0;
 }

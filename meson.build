@@ -55,6 +55,7 @@ endif
 ################################################################################
 
 sources = [ 'src/codes.c',
+            'src/log.c',
             'src/main.c' ]
 
 if get_option('auth-token')
@@ -111,6 +112,11 @@ if get_option('tests')
                 'src/dns_txt.c'],
       'deps': [ all_dep ],
       'opt': 'dns-txt-token',
+    },
+    'test_logs': {
+      'srcs': [ 'tests/test_log.c',
+                'src/log.c'],
+      'deps': [ all_dep ],
     },
   }
 

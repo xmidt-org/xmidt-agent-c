@@ -15,9 +15,9 @@
 
 #include <cutils/file.h>
 #include <cutils/xxd.h>
+#include <otelc/time.h>
 
 #include "../../src/dns_txt.h"
-#include "../../src/time.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */

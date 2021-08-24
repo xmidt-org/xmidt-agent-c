@@ -9,6 +9,7 @@ subprojects/cjwt-*
 subprojects/curlws-*
 subprojects/cutils-*
 subprojects/mpack-*
+subprojects/otelc-*
 subprojects/packagecache
 subprojects/trower-base64-*
 subprojects/wrp-c-*

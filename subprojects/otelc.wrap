@@ -1,0 +1,9 @@
+[wrap-file]
+directory = otelc-0.0.1
+
+source_filename = otelc-0.0.1.tar.gz
+source_url = https://github.com/xmidt-org/otelc/releases/download/v0.0.1/otelc-0.0.1.tar.gz
+source_hash = ecc996ebe48c6739bc67ae4a5ecfb87090a7d8f6c4aff5a2273d8cc58e964272
+
+[provides]
+libtrower_base64 = libtrower_base64_dep

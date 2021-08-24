@@ -1,6 +1,8 @@
 /* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
-/* SPDX-FileCopyrightText: 2021 Weston Schmidt */
 /* SPDX-License-Identifier: Apache-2.0 */
+
+/* Needed for gmtime_r() */
+#define _POSIX_C_SOURCE 199309L
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -86,13 +88,13 @@ static void _log(enum level level, const char *format, va_list args)
 {
     char ts[32];
     time_t now;
-    struct tm *p = NULL;
+    struct tm utc;
     char *payload = NULL;
 
     /* Generate an RFC3339 timestamp string */
     time(&now);
-    p = gmtime(&now);
-    strftime(ts, sizeof(ts) - 1, "%F %TZ", p);
+    gmtime_r(&now, &utc);
+    strftime(ts, sizeof(ts) - 1, "%F %TZ", &utc);
 
     payload = mvaprintf(format, args);
     if (payload) {

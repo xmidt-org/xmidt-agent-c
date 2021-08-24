@@ -113,6 +113,11 @@ if get_option('tests')
       'deps': [ all_dep ],
       'opt': 'dns-txt-token',
     },
+    'test_logs': {
+      'srcs': [ 'tests/test_log.c',
+                'src/log.c'],
+      'deps': [ all_dep ],
+    },
   }
 
   foreach test, vals : tests

@@ -52,7 +52,7 @@ struct config_building {
 /*----------------------------------------------------------------------------*/
 /*                             Internal functions                             */
 /*----------------------------------------------------------------------------*/
-static void output_error(struct config_ctx *ctx, const char *name,
+static void output_error(const struct config_ctx *ctx, const char *name,
                          const char *type)
 {
     switch (ctx->depth) {

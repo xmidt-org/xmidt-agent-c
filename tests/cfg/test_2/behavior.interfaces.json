@@ -1,0 +1,6 @@
+{
+    "behavior": {
+        "interfaces": [ { "name": "wan0", "cost": 99 },
+                        { "name": "eth0", "cost": 10 } ]
+    }
+}

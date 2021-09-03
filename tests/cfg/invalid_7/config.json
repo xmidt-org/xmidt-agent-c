@@ -1,0 +1,10 @@
+{
+
+    "behavior": {
+        "dns_txt": {
+            "jwt": {
+                "allowed_algs": "invalid, expecting an array"
+            }
+        }
+    }
+}

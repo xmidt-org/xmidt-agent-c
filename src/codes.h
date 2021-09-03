@@ -26,6 +26,12 @@ typedef enum {
     XA_DNS_RECORD_TOO_SHORT,  /* 12 */
     XA_DNS_RECORD_INVALID,    /* 13 */
     XA_DNS_TOKEN_NOT_PRESENT, /* 14 */
+    XA_NOT_A_DIR,             /* 15 */
+    XA_PATH_TOO_LONG,         /* 16 */
+    XA_FAILED_TO_OPEN_FILE,   /* 17 */
+    XA_FAILED_TO_READ_FILE,   /* 18 */
+    XA_CLI_ERROR,             /* 19 */
+    XA_CONFIG_FILE_ERROR,     /* 20 */
 
     XA_LAST /* never use! */
 } XAcode;

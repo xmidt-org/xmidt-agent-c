@@ -1,0 +1,9 @@
+{
+    "behavior": {
+        "dns_txt": {
+            "jwt": {
+                "keys_dir": 123
+            }
+        }
+    }
+}

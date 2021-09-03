@@ -1,0 +1,7 @@
+{
+    "behavior": {
+        "dns_txt": {
+            "base_fqdn": "xmidt.example.com"
+        }
+    }
+}

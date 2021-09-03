@@ -42,7 +42,7 @@ subdir('src')
 # Define the dependencies
 ################################################################################
 cjwt_dep             = dependency('cjwt',          version: '>=2.1.0', required: get_option('dns-txt-token'))
-curl_dep             = dependency('libcurl',       version: '>=7.50.2')
+curl_dep             = dependency('libcurl',       version: '>=7.66.0')
 curlws_dep           = dependency('curlws',        version: '>=1.0.4')
 cutils_dep           = dependency('cutils',        version: '>=2.1.0')
 libcjson_dep         = dependency('libcjson',      version: '>=1.7.14', fallback: ['cjson'])

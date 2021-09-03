@@ -4,9 +4,12 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
-#include "config/config.h"
-#include "log.h"
+#include "../log.h"
+#include "config.h"
+#include "internal.h"
+
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
@@ -31,28 +34,33 @@
 /*----------------------------------------------------------------------------*/
 /*                             Internal functions                             */
 /*----------------------------------------------------------------------------*/
-/* none */
+static void print_help(const char *program_name)
+{
+    fprintf(stderr, "Usage: %s --config.dir <directory>\n", program_name);
+}
+
 
 /*----------------------------------------------------------------------------*/
 /*                             External Functions                             */
 /*----------------------------------------------------------------------------*/
-int main(int argc, char *argv[])
+config_t *config_from_cli(int argc, const char *argv[], XAcode *rv)
 {
-    XAcode xa_rv = XA_OK;
-    config_t *c = NULL;
+    const char *path = NULL;
 
-    /* Handle args */
-    log_info("hello, world");
-    c = config_from_cli(argc, (const char **)argv, &xa_rv);
+    if ((2 == argc) && (!strncmp("--config.dir=", argv[1], 13))) {
+        path = &argv[1][13];
+        if ('\0' == *path) {
+            path = NULL;
+        }
+    } else if ((3 == argc) && (!strcmp("--config.dir", argv[1]))) {
+        path = argv[2];
+    }
 
-    /* Get auth JWT */
+    if (!path) {
+        print_help(argv[0]);
+        *rv = XA_CLI_ERROR;
+        return NULL;
+    }
 
-    /* Perform DNS TXT lookup */
-
-    /* Connect the websocket */
-
-    /* Clean up */
-    config_destroy(c);
-
-    return 0;
+    return config_read(path, rv);
 }

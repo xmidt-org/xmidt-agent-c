@@ -9,11 +9,29 @@ project('xmidt-agent', 'c',
         default_options: ['c_std=c99',
                           'b_coverage=true'])
 
+# Automatically add the xa_config.h file to all files
+add_project_arguments('-include', 'xa_config.h', language: 'c')
+
 # We want strict flags
 warning_level = 3   # -Wall
 werror = true
 
 cc = meson.get_compiler('c')
+
+################################################################################
+# Build the configured options
+################################################################################
+cdata = configuration_data()
+
+if get_option('dns-txt-token')
+  cdata.set('DNS_TXT_TOKEN_SUPPORT', 1)
+endif
+if get_option('auth-token')
+  cdata.set('AUTH_TOKEN_SUPPORT', 1)
+endif
+
+configure_file(output: 'xa_config.h',
+               configuration: cdata)
 
 ################################################################################
 # Generate the version header file
@@ -23,10 +41,10 @@ subdir('src')
 ################################################################################
 # Define the dependencies
 ################################################################################
-cjwt_dep             = dependency('cjwt',          version: '>=2.0.1', required: get_option('dns-txt-token'))
+cjwt_dep             = dependency('cjwt',          version: '>=2.1.0', required: get_option('dns-txt-token'))
 curl_dep             = dependency('libcurl',       version: '>=7.50.2')
 curlws_dep           = dependency('curlws',        version: '>=1.0.4')
-cutils_dep           = dependency('cutils',        version: '>=1.0.0')
+cutils_dep           = dependency('cutils',        version: '>=2.1.0')
 libcjson_dep         = dependency('libcjson',      version: '>=1.7.14', fallback: ['cjson'])
 libtrower_base64_dep = dependency('trower-base64', version: '>=1.2.7')
 ludocode_mpack_dep   = dependency('mpack',         version: '>=1.0', fallback: ['ludocode-mpack', 'ludocode_mpack_dep'])
@@ -36,7 +54,8 @@ wrpc_dep             = dependency('wrp-c',         version: '>=2.0.0')
 
 resolv_dep = cc.find_library('resolv', required: get_option('dns-txt-token'))
 
-all_dep = [curl_dep,
+all_dep = [cjwt_dep,
+           curl_dep,
            curlws_dep,
            cutils_dep,
            libcjson_dep,
@@ -47,7 +66,7 @@ all_dep = [curl_dep,
            wrpc_dep]
 
 if get_option('dns-txt-token')
-  all_dep += [cjwt_dep, resolv_dep]
+  all_dep += [resolv_dep]
 endif
 
 ################################################################################
@@ -55,6 +74,10 @@ endif
 ################################################################################
 
 sources = [ 'src/codes.c',
+            'src/config/cfg_file.c',
+            'src/config/cli.c',
+            'src/config/config.c',
+            'src/config/print.c',
             'src/log.c',
             'src/main.c' ]
 
@@ -106,6 +129,19 @@ if get_option('tests')
       'deps': [ curl_dep, cutils_dep ],
       'opt': 'auth-token',
     },
+    'test_cli': {
+      'srcs': [ 'tests/test_cli.c',
+                'src/config/cli.c'],
+      'deps': [ all_dep ],
+    },
+    'test_config': {
+      'srcs': [ 'tests/test_config.c',
+                'src/config/cfg_file.c',
+                'src/config/config.c',
+                'src/config/print.c',
+                'src/log.c'],
+      'deps': [ all_dep ],
+    },
     'test_dns_txt': {
       'srcs': [ 'tests/test_dns_txt.c',
                 'src/codes.c',
@@ -132,7 +168,8 @@ if get_option('tests')
            executable(test, vals['srcs'],
                       dependencies: deps,
                       install: false,
-                      link_args: test_args))
+                      link_args: test_args),
+          args: [meson.global_source_root()+'/tests'])
     endif
   endforeach
 
@@ -140,7 +177,8 @@ if get_option('tests')
                  is_default: true,
                  exe_wrapper: [ 'valgrind',
                                 '--leak-check=full',
-                                '--error-exitcode=1' ],
+                                '--error-exitcode=1',
+                                '-s'],
                  timeout_multiplier: 2)
 endif
 

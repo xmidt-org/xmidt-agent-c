@@ -23,10 +23,18 @@ Files: subprojects/curlws.wrap
 Copyright: 2021 Comcast Cable Communications Management, LLC
 License: MIT
 
+Files: subprojects/cutils.wrap
+Copyright: 2021 Comcast Cable Communications Management, LLC
+License: Apache-2.0
+
 Files: subprojects/otelc.wrap
 Copyright: 2021 Comcast Cable Communications Management, LLC
 License: Apache-2.0
 
 Files: subprojects/wrp-c.wrap
+Copyright: 2021 Comcast Cable Communications Management, LLC
+License: Apache-2.0
+
+Files: tests/cfg/**
 Copyright: 2021 Comcast Cable Communications Management, LLC
 License: Apache-2.0

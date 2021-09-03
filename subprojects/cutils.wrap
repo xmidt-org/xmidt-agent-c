@@ -1,11 +1,9 @@
-# SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
-# SPDX-License-Identifier: Apache-2.0
 [wrap-file]
-directory = cutils-1.0.0
+directory = cutils-2.1.0
 
-source_filename = cutils-1.0.0.tar.gz
-source_url = https://github.com/xmidt-org/cutils/releases/download/v1.0.0/cutils-1.0.0.tar.gz
-source_hash = 9b106b8c6884f26864140b1ec851f94bcb58ad86b6f31861b8ac5d5af564839c
+source_filename = cutils-2.1.0.tar.gz
+source_url = https://github.com/xmidt-org/cutils/releases/download/v2.1.0/cutils-2.1.0.tar.gz
+source_hash = de4cee56d4ac3cc7a679254cde344e23cdfe10edc94a706699ff07b8f55cc0fa
 
 [provides]
 libcutils = libcutils_dep

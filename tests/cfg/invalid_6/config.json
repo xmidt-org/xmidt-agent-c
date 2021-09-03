@@ -1,0 +1,5 @@
+{
+    "behavior": {
+        "interfaces": "invalid, expected an array"
+    }
+}

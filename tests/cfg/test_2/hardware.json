@@ -1,0 +1,8 @@
+{
+    "hardware": {
+        "model": "MODEL_NAME",
+        "serial_number": "SERIAL_NUMBER",
+        "manufacturer": "MANUFACTURER_NAME",
+        "last_reboot_reason": "REASON"
+    }
+}

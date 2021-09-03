@@ -1,0 +1,8 @@
+{
+    "behavior": {
+        "url": "URL",
+        "ping_timeout": 90,
+        "backoff_max": 250,
+        "force_ip": 4
+    }
+}

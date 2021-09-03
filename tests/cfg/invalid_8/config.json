@@ -1,0 +1,9 @@
+{
+    "behavior": {
+        "dns_txt": {
+            "jwt": {
+                "allowed_algs": [ 12, 14 ]
+            }
+        }
+    }
+}

@@ -97,7 +97,7 @@ static void output_error(const struct config_ctx *ctx, const char *name,
  *  Convert what we expect to be a string object into an xa_string or fail
  *  if that is not possible.
  */
-static XAcode process_string(const cJSON *json, struct config_ctx *ctx,
+static XAcode process_string(const cJSON *json, const struct config_ctx *ctx,
                              const char *name, struct xa_string *dest,
                              XAcode *rv)
 {
@@ -127,7 +127,7 @@ static XAcode process_string(const cJSON *json, struct config_ctx *ctx,
  *  Convert what we expect to be a number object into an xa_string or fail
  *  if that is not possible.
  */
-static XAcode process_int(const cJSON *json, struct config_ctx *ctx,
+static XAcode process_int(const cJSON *json, const struct config_ctx *ctx,
                           const char *name, int *dest, XAcode *rv)
 {
     const cJSON *val = cJSON_GetObjectItemCaseSensitive(json, name);
@@ -146,7 +146,7 @@ static XAcode process_int(const cJSON *json, struct config_ctx *ctx,
 }
 
 
-static XAcode process_jwt_alg_array(const cJSON *json, struct config_ctx *ctx,
+static XAcode process_jwt_alg_array(const cJSON *json, const struct config_ctx *ctx,
                                     const char *name, struct config_building *cfg,
                                     XAcode *rv)
 {
@@ -226,36 +226,38 @@ static XAcode process_interfaces(const cJSON *json, struct config_ctx *ctx,
 {
     const cJSON *obj = process_obj(json, ctx, "interfaces");
 
-    if (obj) {
-        if (obj->type != cJSON_Array) {
-            output_error(ctx, "interfaces", "array");
-            *rv = XA_CONFIG_FILE_ERROR;
-        } else {
-            int len = cJSON_GetArraySize(obj);
+    if (!obj) {
+        return *rv;
+    }
 
-            for (int i = 0; i < len; i++) {
-                const cJSON *item = cJSON_GetArrayItem(obj, i);
-                struct interface *ni = must_calloc(sizeof(struct interface), 1);
-                struct interface *present = NULL;
+    if (obj->type != cJSON_Array) {
+        output_error(ctx, "interfaces", "array");
+        *rv = XA_CONFIG_FILE_ERROR;
+    } else {
+        int len = cJSON_GetArraySize(obj);
 
-                process_string(item, ctx, "name", &ni->name, rv);
-                process_int(item, ctx, "cost", &ni->cost, rv);
+        for (int i = 0; i < len; i++) {
+            const cJSON *item = cJSON_GetArrayItem(obj, i);
+            struct interface *ni = must_calloc(sizeof(struct interface), 1);
+            struct interface *present = NULL;
 
-                present = hashmap_get(&cfg->interfaces, ni->name.s, ni->name.len);
-                if (NULL != present) {
-                    present->cost = ni->cost;
+            process_string(item, ctx, "name", &ni->name, rv);
+            process_int(item, ctx, "cost", &ni->cost, rv);
 
-                    /* We don't need the new one we made */
-                    free(ni->name.s);
-                    free(ni);
-                } else {
-                    hashmap_put(&cfg->interfaces, ni->name.s, ni->name.len, ni);
-                }
+            present = hashmap_get(&cfg->interfaces, ni->name.s, ni->name.len);
+            if (NULL != present) {
+                present->cost = ni->cost;
+
+                /* We don't need the new one we made */
+                free(ni->name.s);
+                free(ni);
+            } else {
+                hashmap_put(&cfg->interfaces, ni->name.s, ni->name.len, ni);
             }
         }
-
-        end_obj(ctx);
     }
+
+    end_obj(ctx);
 
     return *rv;
 }

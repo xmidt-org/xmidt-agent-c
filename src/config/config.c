@@ -89,7 +89,6 @@ static void output_error(struct config_ctx *ctx, const char *name,
         log_fatal("%s unknown error related to %s and %s",
                   ctx->filename, name, type);
         abort();
-        break;
     }
 }
 

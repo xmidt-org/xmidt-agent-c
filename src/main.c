@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include "config/config.h"
-#include "log.h"
+#include "logging/log.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */

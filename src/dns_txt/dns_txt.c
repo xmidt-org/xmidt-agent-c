@@ -8,7 +8,7 @@
 
 #include <cutils/memory.h>
 
-#include "codes.h"
+#include "../error/codes.h"
 #include "dns_txt.h"
 
 /*----------------------------------------------------------------------------*/

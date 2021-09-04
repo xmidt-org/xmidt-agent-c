@@ -72,20 +72,19 @@ endif
 ################################################################################
 # Define the main program
 ################################################################################
-
-sources = [ 'src/codes.c',
-            'src/config/cfg_file.c',
+sources = [ 'src/config/cfg_file.c',
             'src/config/cli.c',
             'src/config/config.c',
             'src/config/print.c',
-            'src/log.c',
+            'src/error/codes.c',
+            'src/logging/log.c',
             'src/main.c' ]
 
 if get_option('auth-token')
-  sources += [ 'src/auth_token.c' ]
+  sources += [ 'src/auth_token/auth_token.c' ]
 endif
 if get_option('dns-txt-token')
-  sources += [ 'src/dns_txt.c' ]
+  sources += [ 'src/dns_txt/dns_txt.c' ]
 endif
 
 executable(meson.project_name(),
@@ -101,16 +100,16 @@ if get_option('examples')
   if get_option('auth-token')
     executable('auth_fetch_cli',
                [ 'examples/auth-fetch-cli/cli.c',
-                 'src/auth_token.c' ],
-                 dependencies: [curl_dep, uuid_dep])
+                 'src/auth_token/auth_token.c' ],
+               dependencies: [curl_dep, uuid_dep])
   endif
 
   if get_option('dns-txt-token')
     executable('dns_token_cli',
                [ 'examples/dns-token-cli/cli.c',
-                 'src/codes.c',
-                 'src/dns_txt.c'],
-                 dependencies: all_dep)
+                 'src/error/codes.c',
+                 'src/dns_txt/dns_txt.c'],
+               dependencies: all_dep)
   endif
 endif
 
@@ -125,7 +124,7 @@ if get_option('tests')
   tests = {
     'test_auth_token': {
       'srcs': [ 'tests/test_auth_token.c',
-                'src/auth_token.c'],
+                'src/auth_token/auth_token.c'],
       'deps': [ curl_dep, cutils_dep ],
       'opt': 'auth-token',
     },
@@ -139,19 +138,19 @@ if get_option('tests')
                 'src/config/cfg_file.c',
                 'src/config/config.c',
                 'src/config/print.c',
-                'src/log.c'],
+                'src/logging/log.c'],
       'deps': [ all_dep ],
     },
     'test_dns_txt': {
       'srcs': [ 'tests/test_dns_txt.c',
-                'src/codes.c',
-                'src/dns_txt.c'],
+                'src/error/codes.c',
+                'src/dns_txt/dns_txt.c'],
       'deps': [ all_dep ],
       'opt': 'dns-txt-token',
     },
     'test_logs': {
       'srcs': [ 'tests/test_log.c',
-                'src/log.c'],
+                'src/logging/log.c'],
       'deps': [ all_dep ],
     },
   }

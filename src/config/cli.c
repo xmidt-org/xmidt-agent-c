@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../log.h"
+#include "../logging/log.h"
 #include "config.h"
 #include "internal.h"
 

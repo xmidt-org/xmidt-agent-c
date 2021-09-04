@@ -8,7 +8,7 @@
 #include <CUnit/Basic.h>
 #include <curl/curl.h>
 
-#include "../src/auth_token.h"
+#include "../src/auth_token/auth_token.h"
 
 #include "curl_mocks.c"
 

@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../src/auth_token.h"
+#include "../../src/auth_token/auth_token.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */

@@ -1,7 +1,7 @@
 /* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
-#include "../log.h"
+#include "../logging/log.h"
 #include "config.h"
 #include "internal.h"
 

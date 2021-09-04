@@ -7,7 +7,7 @@
 #include <cjson/cJSON.h>
 #include <cutils/hashmap.h>
 
-#include "../codes.h"
+#include "../error/codes.h"
 #include "config.h"
 
 #define CTX_MAX_DEPTH 4

@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../src/log.h"
+#include "../src/logging/log.h"
 
 
 void test_most(void)

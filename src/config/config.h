@@ -8,7 +8,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "../codes.h"
+#include "../error/codes.h"
 #include "../string.h"
 
 struct interface {

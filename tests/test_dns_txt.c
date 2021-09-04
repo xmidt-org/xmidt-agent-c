@@ -16,7 +16,7 @@
 
 #include <cutils/xxd.h>
 
-#include "../src/dns_txt.h"
+#include "../src/dns_txt/dns_txt.h"
 
 static void set_extra_line_record();
 static void set_normal_record();

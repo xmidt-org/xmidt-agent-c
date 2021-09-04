@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-#include "codes.h"
+#include "../error/codes.h"
 
 /* The Xmidt agent has a feature that allows it to look up a DNS TXT record that
  * is expected (and validated) to be JWT signed by a known & trusted entity.

@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../src/cli/config.h"
 #include "../src/config/config.h"
-#include "../src/config/internal.h"
 
 config_t *config_read(const char *path, XAcode *rv)
 {

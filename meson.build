@@ -72,13 +72,13 @@ endif
 ################################################################################
 # Define the main program
 ################################################################################
-sources = [ 'src/config/cfg_file.c',
-            'src/config/cli.c',
+sources = [ 'src/cli/config.c',
+            'src/cli/main.c',
+            'src/config/cfg_file.c',
             'src/config/config.c',
             'src/config/print.c',
             'src/error/codes.c',
-            'src/logging/log.c',
-            'src/main.c' ]
+            'src/logging/log.c']
 
 if get_option('auth-token')
   sources += [ 'src/auth_token/auth_token.c' ]
@@ -130,7 +130,7 @@ if get_option('tests')
     },
     'test_cli': {
       'srcs': [ 'tests/test_cli.c',
-                'src/config/cli.c'],
+                'src/cli/config.c'],
       'deps': [ all_dep ],
     },
     'test_config': {

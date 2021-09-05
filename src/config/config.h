@@ -65,13 +65,10 @@ typedef struct {
 
 
 /**
- *  config_from_cli takes the program cli arguments and uses them to make
- *  the overall config_t structure the rest of the program will use to define
- *  the behaviors.
- *
- *  The returned object needs to be cleaned up by calling config_destroy().
+ *  config_read is the high level call that converts a path into the
+ *  configuration object.
  */
-config_t *config_from_cli(int argc, const char *argv[], XAcode *rv);
+config_t *config_read(const char *path, XAcode *rv);
 
 
 /**

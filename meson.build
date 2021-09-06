@@ -74,6 +74,7 @@ endif
 ################################################################################
 sources = [ 'src/cli/config.c',
             'src/cli/main.c',
+            'src/cli/signals.c',
             'src/config/cfg_file.c',
             'src/config/config.c',
             'src/config/print.c',

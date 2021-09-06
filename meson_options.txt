@@ -14,6 +14,9 @@ option('auth-token', type: 'boolean', value: 'true',
 option('dns-txt-token', type: 'boolean', value: 'true',
        description: 'enables the code to fetch a dns txt record and process it as a jwt')
 
+option('include-breakpad', type: 'boolean', value: 'false',
+       description: 'enables the optional inclusion of breakpad for crash handling')
+
 # Build configuration options
 #-------------------------------------------------------------------------------
 option('examples', type: 'boolean', value: 'true',

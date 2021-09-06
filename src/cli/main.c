@@ -4,10 +4,12 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "../config/config.h"
 #include "../logging/log.h"
 #include "config.h"
+#include "signals.h"
 
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
@@ -23,6 +25,7 @@
 /*                            File Scoped Variables                           */
 /*----------------------------------------------------------------------------*/
 /* none */
+static volatile bool done;
 
 /*----------------------------------------------------------------------------*/
 /*                             Function Prototypes                            */
@@ -32,7 +35,13 @@
 /*----------------------------------------------------------------------------*/
 /*                             Internal functions                             */
 /*----------------------------------------------------------------------------*/
-/* none */
+
+static void handle_lifecycle_command(enum signals_command e)
+{
+    (void)e;
+
+    done = true;
+}
 
 /*----------------------------------------------------------------------------*/
 /*                             External Functions                             */
@@ -45,12 +54,22 @@ int main(int argc, char *argv[])
     /* Handle args */
     log_info("hello, world");
     c = config_from_cli(argc, (const char **)argv, &xa_rv);
+    if (!c) {
+        return -1;
+    }
 
-    /* Get auth JWT */
+    signals_config(&handle_lifecycle_command);
 
-    /* Perform DNS TXT lookup */
+    done = false;
 
-    /* Connect the websocket */
+    while (!done) {
+        /* Get auth JWT */
+
+        /* Perform DNS TXT lookup */
+
+        /* Connect the websocket */
+        sleep(1);
+    }
 
     /* Clean up */
     config_destroy(c);

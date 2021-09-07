@@ -73,6 +73,8 @@ static void sig_term(int sig)
 
 static void default_shutdown(enum signals_command e)
 {
+    (void)e;
+
     log_fatal("lifecycle command: default handler just exit(-1)");
     exit(-1);
 }

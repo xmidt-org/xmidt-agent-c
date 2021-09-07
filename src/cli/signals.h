@@ -18,4 +18,3 @@ enum signals_command {
 void signals_config(void (*command)(enum signals_command));
 
 #endif
-

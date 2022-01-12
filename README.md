@@ -20,9 +20,8 @@ XMiDT is a highly scalable, highly available, generic message routing system.
 # Building and Testing Instructions
 
 ```
-mkdir build
+meson setup --warnlevel 3 --werror build
 cd build
-cmake ..
-make
-make test
+ninja all test coverage
+firefox meson-logs/coveragereport/index.html
 ```

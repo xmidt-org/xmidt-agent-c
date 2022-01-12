@@ -88,10 +88,10 @@ if get_option('dns-txt-token')
   sources += [ 'src/dns_txt/dns_txt.c' ]
 endif
 
-executable(meson.project_name(),
-           sources,
-           dependencies: all_dep,
-           install: true)
+prog = executable(meson.project_name(),
+                  sources,
+                  dependencies: all_dep,
+                  install: true)
 
 ################################################################################
 # Define the examples
@@ -193,3 +193,9 @@ if reuse_bin.found()
                 build_always_stale: true,
                 output: ['license'])
 endif
+
+################################################################################
+# Add the coverity check target
+################################################################################
+
+alias_target('coverity', prog)

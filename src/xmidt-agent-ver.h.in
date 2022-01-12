@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
+// SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC
 // SPDX-License-Identifier: Apache-2.0
 
 #ifndef _XMIDT_AGENT_VERSION_H_
 #define _XMIDT_AGENT_VERSION_H_ 1
 
+// clang-format off
 #define XMIDT_AGENT_VERSION          "@xmidt-agent_VERSION@"
 
 #define XMIDT_AGENT_VERSION_MAJOR    @xmidt-agent_VERSION_MAJOR@
@@ -23,5 +24,6 @@
  * being the newer version.
  */
 #define XMIDT_AGENT_VERSION_NUM      @xmidt-agent_BITWISE_VERSION@
+// clang-format on
 
 #endif

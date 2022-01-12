@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC
+ * SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 #include <inttypes.h>
@@ -59,14 +59,15 @@ static bool is_opt(const char *in, const char *s1, const char *s2)
 
 void print_usage(char *name)
 {
-    printf("Usage: %s [options...] <fqdn>\n"
-           " -h, --help                       This help text.\n"
-           "     --interface       <name>     Use network INTERFACE (or address).\n"
-           " -v  --verbose                    Verbose debugging is enabled, repeat for more.\n"
-           " -k  --key             <file>     The public key for validating the jwt.\n"
-           " -n  --now             <seconds>  seconds since Jan 1, 1970 or 'now' if not specified.\n"
-           "     --skew            <seconds>  Allowable skew in seconds or defaults to 0.\n",
-           name);
+    printf(
+        "Usage: %s [options...] <fqdn>\n"
+        " -h, --help                       This help text.\n"
+        "     --interface       <name>     Use network INTERFACE (or address).\n"
+        " -v  --verbose                    Verbose debugging is enabled, repeat for more.\n"
+        " -k  --key             <file>     The public key for validating the jwt.\n"
+        " -n  --now             <seconds>  seconds since Jan 1, 1970 or 'now' if not specified.\n"
+        "     --skew            <seconds>  Allowable skew in seconds or defaults to 0.\n",
+        name);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -74,22 +75,22 @@ void print_usage(char *name)
 /*----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-    XAcode rv = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode rv                     = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
-    cjwt_t *jwt = NULL;
-    const char *key_file = NULL;
-    const char *fqdn = NULL;
-    int64_t skew = 0;
-    int64_t now = 0;
-    uint8_t *pub_key = NULL;
-    size_t pub_key_len = 0;
-    bool verbose = false;
+    cjwt_t *jwt                   = NULL;
+    const char *key_file          = NULL;
+    const char *fqdn              = NULL;
+    int64_t skew                  = 0;
+    int64_t now                   = 0;
+    uint8_t *pub_key              = NULL;
+    size_t pub_key_len            = 0;
+    bool verbose                  = false;
 
-    int64_t start_time = 0;
-    int64_t fetch_time = 0;
+    int64_t start_time     = 0;
+    int64_t fetch_time     = 0;
     int64_t assembled_time = 0;
-    int64_t jwt_time = 0;
+    int64_t jwt_time       = 0;
 
     now = time_now_s();
 
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
     }
 
     if (key_file) {
-        if (0 != freadall(key_file, 0, (void **)&pub_key, &pub_key_len)) {
+        if (0 != freadall(key_file, 0, (void **) &pub_key, &pub_key_len)) {
             printf("Failed to open the file: %s\n", key_file);
             return -1;
         }
@@ -150,7 +151,7 @@ int main(int argc, char *argv[])
 
     if (CJWTE_OK != cjwt_decode(token->buf, token->len, 0, pub_key, pub_key_len, now, skew, &jwt)) {
         printf("Unable to decode the jwt from the text record.\n");
-        printf("jwt:\n'%.*s'\nttl: %ud\n\n", (int)token->len, token->buf, token->ttl);
+        printf("jwt:\n'%.*s'\nttl: %ud\n\n", (int) token->len, token->buf, token->ttl);
         printf("Original DNS record:\n");
         xxd(resp->full, resp->len, stdout);
         dns_destroy_response(resp);
@@ -172,7 +173,7 @@ int main(int argc, char *argv[])
     }
 
     if (verbose) {
-        printf("\nThe reassembed buffer:\n'%.*s'\nttl: %ud\n\n", (int)token->len, token->buf, token->ttl);
+        printf("\nThe reassembed buffer:\n'%.*s'\nttl: %ud\n\n", (int) token->len, token->buf, token->ttl);
     }
 
     if (verbose) {
@@ -186,4 +187,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-

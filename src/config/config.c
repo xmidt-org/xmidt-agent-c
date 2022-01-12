@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <cutils/file.h>
@@ -57,38 +57,38 @@ static void output_error(const struct config_ctx *ctx, const char *name,
 {
     switch (ctx->depth) {
 #if (1 < CTX_MAX_DEPTH)
-    case 1:
-        log_fatal("Error in file: %s in object '.%s.%s' is not a %s.",
-                  ctx->filename, ctx->obj[0], name, type);
-        break;
+        case 1:
+            log_fatal("Error in file: %s in object '.%s.%s' is not a %s.",
+                      ctx->filename, ctx->obj[0], name, type);
+            break;
 #endif
 #if (2 < CTX_MAX_DEPTH)
-    case 2:
-        log_fatal("Error in file: %s in object '.%s.%s.%s' is not a %s.",
-                  ctx->filename, ctx->obj[0], ctx->obj[1], name, type);
-        break;
+        case 2:
+            log_fatal("Error in file: %s in object '.%s.%s.%s' is not a %s.",
+                      ctx->filename, ctx->obj[0], ctx->obj[1], name, type);
+            break;
 #endif
 #if (3 < CTX_MAX_DEPTH)
-    case 3:
-        log_fatal("Error in file: %s in object '.%s.%s.%s.%s' is not a %s.",
-                  ctx->filename, ctx->obj[0], ctx->obj[1],
-                  ctx->obj[2], name, type);
-        break;
+        case 3:
+            log_fatal("Error in file: %s in object '.%s.%s.%s.%s' is not a %s.",
+                      ctx->filename, ctx->obj[0], ctx->obj[1],
+                      ctx->obj[2], name, type);
+            break;
 #endif
 #if (4 < CTX_MAX_DEPTH)
-    case 4:
-        log_fatal("Error in file: %s in object '.%s.%s.%s.%s.%s' is not a %s.",
-                  ctx->filename, ctx->obj[0], ctx->obj[1],
-                  ctx->obj[2], ctx->obj[3], name, type);
-        break;
+        case 4:
+            log_fatal("Error in file: %s in object '.%s.%s.%s.%s.%s' is not a %s.",
+                      ctx->filename, ctx->obj[0], ctx->obj[1],
+                      ctx->obj[2], ctx->obj[3], name, type);
+            break;
 #endif
-    default:
-        log_fatal("depth: %d\n", ctx->depth);
-        /* This is really a bug at build time, but this is still a nice
-         * sanity check. */
-        log_fatal("%s unknown error related to %s and %s",
-                  ctx->filename, name, type);
-        abort();
+        default:
+            log_fatal("depth: %d\n", ctx->depth);
+            /* This is really a bug at build time, but this is still a nice
+             * sanity check. */
+            log_fatal("%s unknown error related to %s and %s",
+                      ctx->filename, name, type);
+            abort();
     }
 }
 
@@ -116,7 +116,7 @@ static XAcode process_string(const cJSON *json, const struct config_ctx *ctx,
         }
 
         dest->len = cu_strnlen(val->valuestring, SIZE_MAX);
-        dest->s = cu_must_strndup(val->valuestring, dest->len);
+        dest->s   = cu_must_strndup(val->valuestring, dest->len);
     }
 
     return *rv;
@@ -151,7 +151,7 @@ static XAcode process_jwt_alg_array(const cJSON *json, const struct config_ctx *
                                     XAcode *rv)
 {
     const cJSON *val = cJSON_GetObjectItemCaseSensitive(json, name);
-    int len = 0;
+    int len          = 0;
 
     if (!val) {
         return *rv;
@@ -174,9 +174,9 @@ static XAcode process_jwt_alg_array(const cJSON *json, const struct config_ctx *
             struct xa_string tmp;
 
             tmp.len = cu_strnlen(item->valuestring, SIZE_MAX);
-            tmp.s = cu_must_strndup(item->valuestring, tmp.len);
+            tmp.s   = cu_must_strndup(item->valuestring, tmp.len);
 
-            hashmap_put(&cfg->jwt_algs, tmp.s, tmp.len, (void *)1);
+            hashmap_put(&cfg->jwt_algs, tmp.s, tmp.len, (void *) 1);
         }
     }
 
@@ -237,8 +237,8 @@ static XAcode process_interfaces(const cJSON *json, struct config_ctx *ctx,
         int len = cJSON_GetArraySize(obj);
 
         for (int i = 0; i < len; i++) {
-            const cJSON *item = cJSON_GetArrayItem(obj, i);
-            struct interface *ni = must_calloc(sizeof(struct interface), 1);
+            const cJSON *item         = cJSON_GetArrayItem(obj, i);
+            struct interface *ni      = must_calloc(sizeof(struct interface), 1);
             struct interface *present = NULL;
 
             process_string(item, ctx, "name", &ni->name, rv);
@@ -270,12 +270,12 @@ static XAcode process_interfaces(const cJSON *json, struct config_ctx *ctx,
  */
 static int copy_interfaces(void *const ctx, struct hashmap_element *const e)
 {
-    struct config_building *cfg = (struct config_building *)ctx;
-    struct interface *ifc = (struct interface *)e->data;
+    struct config_building *cfg = (struct config_building *) ctx;
+    struct interface *ifc       = (struct interface *) e->data;
 
-    cfg->c->behavior.interfaces[cfg->i].name.s = ifc->name.s;
+    cfg->c->behavior.interfaces[cfg->i].name.s   = ifc->name.s;
     cfg->c->behavior.interfaces[cfg->i].name.len = ifc->name.len;
-    cfg->c->behavior.interfaces[cfg->i].cost = ifc->cost;
+    cfg->c->behavior.interfaces[cfg->i].cost     = ifc->cost;
 
     free(ifc);
 
@@ -294,7 +294,7 @@ static int copy_interfaces(void *const ctx, struct hashmap_element *const e)
  */
 static int copy_jwts(void *const ctx, struct hashmap_element *const e)
 {
-    struct config_building *cfg = (struct config_building *)ctx;
+    struct config_building *cfg = (struct config_building *) ctx;
     cjwt_alg_t alg;
 
     /* Convert the string to the enum or mark a failure. */
@@ -309,7 +309,7 @@ static int copy_jwts(void *const ctx, struct hashmap_element *const e)
     cfg->i++;
 
     /* Cast to shed the const declaration. */
-    free((void *)e->key);
+    free((void *) e->key);
 
     /* remove the item and continue, emptying the list */
     return -1;
@@ -350,7 +350,7 @@ static XAcode json_to_config(const cJSON *json, struct config_ctx *ctx,
     obj = process_obj(json, ctx, "behavior");
     if (obj) {
         const cJSON *dns_txt = NULL;
-        const cJSON *issuer = NULL;
+        const cJSON *issuer  = NULL;
 
         process_string(obj, ctx, "url", &cfg->c->behavior.url, rv);
         process_int(obj, ctx, "ping_timeout", &cfg->c->behavior.ping_timeout, rv);
@@ -394,8 +394,8 @@ static XAcode json_to_config(const cJSON *json, struct config_ctx *ctx,
 static XAcode file_to_config(const char *filename, struct config_building *cfg,
                              XAcode *rv)
 {
-    char *data = NULL;
-    size_t len = 0;
+    char *data  = NULL;
+    size_t len  = 0;
     cJSON *json = NULL;
     struct config_ctx ctx;
 
@@ -403,7 +403,7 @@ static XAcode file_to_config(const char *filename, struct config_building *cfg,
     ctx.filename = filename;
 
     *rv = XA_OK;
-    if (0 != freadall(filename, 0, (void **)&data, &len)) {
+    if (0 != freadall(filename, 0, (void **) &data, &len)) {
         *rv = XA_FAILED_TO_OPEN_FILE;
         return *rv;
     }
@@ -427,17 +427,17 @@ static XAcode finalize(struct config_building *cfg, XAcode *rv)
 {
     size_t tmp = 0;
 
-    tmp = hashmap_num_entries(&cfg->interfaces);
+    tmp                              = hashmap_num_entries(&cfg->interfaces);
     cfg->c->behavior.interface_count = tmp;
-    cfg->c->behavior.interfaces = must_calloc(sizeof(struct interface), tmp);
+    cfg->c->behavior.interfaces      = must_calloc(sizeof(struct interface), tmp);
 
     cfg->i = 0;
     hashmap_iterate_pairs(&cfg->interfaces, &copy_interfaces, cfg);
     hashmap_destroy(&cfg->interfaces);
 
-    cfg->i = 0;
-    cfg->failed = false;
-    tmp = hashmap_num_entries(&cfg->jwt_algs);
+    cfg->i                                 = 0;
+    cfg->failed                            = false;
+    tmp                                    = hashmap_num_entries(&cfg->jwt_algs);
     cfg->c->behavior.dns_txt.jwt.alg_count = tmp;
     hashmap_iterate_pairs(&cfg->jwt_algs, &copy_jwts, cfg);
 
@@ -476,20 +476,20 @@ config_t *config_read(const char *path, XAcode *rv)
     list = cfg_file_list_from_path(path, ".json", rv);
 
     switch (*rv) {
-    case XA_OK:
-        break;
-    case XA_NOT_A_DIR:
-        log_fatal("The argument '%s' is not a directory.", path);
-        return NULL;
-    case XA_PATH_TOO_LONG:
-        log_fatal("The argument '%s' is too long.", path);
-        return NULL;
-    case XA_FAILED_TO_OPEN_FILE:
-        log_fatal("The argument '%s' could not be opened.", path);
-        return NULL;
-    default:
-        log_fatal("An unknown error occured.");
-        return NULL;
+        case XA_OK:
+            break;
+        case XA_NOT_A_DIR:
+            log_fatal("The argument '%s' is not a directory.", path);
+            return NULL;
+        case XA_PATH_TOO_LONG:
+            log_fatal("The argument '%s' is too long.", path);
+            return NULL;
+        case XA_FAILED_TO_OPEN_FILE:
+            log_fatal("The argument '%s' could not be opened.", path);
+            return NULL;
+        default:
+            log_fatal("An unknown error occured.");
+            return NULL;
     }
 
     memset(&cb, 0, sizeof(struct config_building));

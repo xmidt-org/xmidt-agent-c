@@ -1,9 +1,9 @@
 [wrap-file]
-directory = cutils-2.1.0
+directory = cutils-2.1.1
 
-source_filename = cutils-2.1.0.tar.gz
-source_url = https://github.com/xmidt-org/cutils/releases/download/v2.1.0/cutils-2.1.0.tar.gz
-source_hash = de4cee56d4ac3cc7a679254cde344e23cdfe10edc94a706699ff07b8f55cc0fa
+source_filename = cutils-2.1.1.tar.gz
+source_url = https://github.com/xmidt-org/cutils/releases/download/v2.1.1/cutils-2.1.1.tar.gz
+source_hash = 06fc5e2b236abf7831b67c07c8a9466e109e955c89167014afd4f6f8c621f4eb
 
 [provides]
 libcutils = libcutils_dep

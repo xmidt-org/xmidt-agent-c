@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 #include <CUnit/Basic.h>
 #include <stdarg.h>
@@ -12,15 +12,15 @@
 config_t *config_read(const char *path, XAcode *rv)
 {
     static config_t h;
-    (void)path;
-    (void)rv;
+    (void) path;
+    (void) rv;
     return &h;
 }
 
 void test_good1(void)
 {
     const char *argv[] = { "program", "--config.dir", "path" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL != config_from_cli(3, argv, &rv));
     CU_ASSERT(XA_OK == rv);
@@ -30,7 +30,7 @@ void test_good1(void)
 void test_good2(void)
 {
     const char *argv[] = { "program", "--config.dir=path" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL != config_from_cli(2, argv, &rv));
     CU_ASSERT(XA_OK == rv);
@@ -40,7 +40,7 @@ void test_good2(void)
 void test_bad1(void)
 {
     const char *argv[] = { "program" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL == config_from_cli(1, argv, &rv));
     CU_ASSERT(XA_CLI_ERROR == rv);
@@ -50,7 +50,7 @@ void test_bad1(void)
 void test_bad2(void)
 {
     const char *argv[] = { "program", "--not_legit", "path" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL == config_from_cli(3, argv, &rv));
     CU_ASSERT(XA_CLI_ERROR == rv);
@@ -60,7 +60,7 @@ void test_bad2(void)
 void test_bad3(void)
 {
     const char *argv[] = { "program", "--not_legit" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL == config_from_cli(2, argv, &rv));
     CU_ASSERT(XA_CLI_ERROR == rv);
@@ -70,7 +70,7 @@ void test_bad3(void)
 void test_bad4(void)
 {
     const char *argv[] = { "program", "--config.dir=" };
-    XAcode rv = XA_OK;
+    XAcode rv          = XA_OK;
 
     CU_ASSERT(NULL == config_from_cli(2, argv, &rv));
     CU_ASSERT(XA_CLI_ERROR == rv);
@@ -94,7 +94,7 @@ void add_suites(CU_pSuite *suite)
 /*----------------------------------------------------------------------------*/
 int main(void)
 {
-    unsigned rv = 1;
+    unsigned rv     = 1;
     CU_pSuite suite = NULL;
 
     if (CUE_SUCCESS == CU_initialize_registry()) {

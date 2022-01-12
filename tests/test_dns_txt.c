@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2008, 2021 Ed Rose, Weston Schmidt */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <CUnit/Basic.h>
@@ -81,21 +81,22 @@ IYz1qKZW4wjUPOWh2oNaXHDgVFCOicEDgp8cV1YqonE/X/UwAbHnNUU=
 */
 
 static const uint8_t *__nq_buf = NULL;
-static int __nq_buf_len = 0;
+static int __nq_buf_len        = 0;
 int res_nquery(res_state statep,
                const char *dname, int class, int type,
                unsigned char *answer, int anslen)
 {
-    (void)statep;
-    (void)dname;
-    (void)class;
-    (void)type;
+    (void) statep;
+    (void) dname;
+    (void) class;
+    (void) type;
+    (void) anslen;
     memcpy(answer, __nq_buf, __nq_buf_len);
 
-    //printf("buff\n");
-    //xxd(__nq_buf, __nq_buf_len, stdout);
-    //printf("\n\nanswer\n");
-    //xxd(answer, __nq_buf_len, stdout);
+    // printf("buff\n");
+    // xxd(__nq_buf, __nq_buf_len, stdout);
+    // printf("\n\nanswer\n");
+    // xxd(answer, __nq_buf_len, stdout);
 
     return __nq_buf_len;
 }
@@ -104,24 +105,24 @@ int res_nquery(res_state statep,
 static int __ninit_rv = 0;
 int res_ninit(res_state statep)
 {
-    (void)statep;
+    (void) statep;
 
     return __ninit_rv;
 }
 
 void res_nclose(res_state statep)
 {
-    (void)statep;
+    (void) statep;
 }
 
 
 void test_normal(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
-    struct dns_rr *rr = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
+    struct dns_rr *rr             = NULL;
     struct dns_xmidt_token *token = NULL;
-    cjwt_t *jwt = NULL;
+    cjwt_t *jwt                   = NULL;
 
     set_normal_record();
 
@@ -170,7 +171,7 @@ void test_normal(void)
 
     /* The result looks good.  Let's go ahead and decode it as a jwt. */
 
-    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *)pub, strlen(pub), 1300, 0, &jwt));
+    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *) pub, strlen(pub), 1300, 0, &jwt));
 
     CU_ASSERT_FATAL(NULL != jwt);
 
@@ -182,10 +183,10 @@ void test_normal(void)
 
 void test_extra_line(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
-    cjwt_t *jwt = NULL;
+    cjwt_t *jwt                   = NULL;
 
     set_extra_line_record();
 
@@ -210,7 +211,7 @@ void test_extra_line(void)
 
     /* The result looks good.  Let's go ahead and decode it as a jwt. */
 
-    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *)pub, strlen(pub), 1300, 0, &jwt));
+    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *) pub, strlen(pub), 1300, 0, &jwt));
 
     CU_ASSERT_FATAL(NULL != jwt);
 
@@ -221,10 +222,10 @@ void test_extra_line(void)
 
 void test_several(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
-    cjwt_t *jwt = NULL;
+    cjwt_t *jwt                   = NULL;
 
     set_several_record();
 
@@ -244,7 +245,7 @@ void test_several(void)
 
     /* The result looks good.  Let's go ahead and decode it as a jwt. */
 
-    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *)pub, strlen(pub), 1300, 0, &jwt));
+    CU_ASSERT(CJWTE_OK == cjwt_decode(token->buf, token->len, 0, (uint8_t *) pub, strlen(pub), 1300, 0, &jwt));
 
     CU_ASSERT_FATAL(NULL != jwt);
 
@@ -256,10 +257,10 @@ void test_several(void)
 
 void test_missing(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
-    cjwt_t *jwt = NULL;
+    cjwt_t *jwt                   = NULL;
 
     set_missing_record();
 
@@ -279,7 +280,7 @@ void test_missing(void)
 
     /* The result looks good.  Let's go ahead and decode it as a jwt. */
 
-    CU_ASSERT(CJWTE_OK != cjwt_decode(token->buf, token->len, 0, (uint8_t *)pub, strlen(pub), 1300, 0, &jwt));
+    CU_ASSERT(CJWTE_OK != cjwt_decode(token->buf, token->len, 0, (uint8_t *) pub, strlen(pub), 1300, 0, &jwt));
 
     /* The only realy way to tell if the token is valid is to decode it & validate
      * the signature.  */
@@ -292,8 +293,8 @@ void test_missing(void)
 
 void test_nothing_for_us(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
 
     set_nothing_for_us_record();
@@ -310,8 +311,8 @@ void test_nothing_for_us(void)
 
 void test_nothing_for_us_short(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
 
     set_very_short_answer();
@@ -328,7 +329,7 @@ void test_nothing_for_us_short(void)
 
 void test_expected_dns_record(void)
 {
-    XAcode err = XA_OK;
+    XAcode err                = XA_OK;
     struct dns_response *resp = NULL;
 
     set_rcode1();
@@ -402,7 +403,7 @@ void test_expected_dns_record(void)
     CU_ASSERT(XA_DNS_TOO_FEW_ANSWERS == err);
     CU_ASSERT(NULL == resp);
 
-    err = XA_OK;
+    err          = XA_OK;
     __nq_buf_len = 0;
     CU_ASSERT(XA_DNS_RESOLVER_ERROR == dns_txt_fetch("112233445566.test-xmidt-example.com", &resp, &err));
     CU_ASSERT(XA_DNS_RESOLVER_ERROR == err);
@@ -412,8 +413,8 @@ void test_expected_dns_record(void)
 
 void test_input_tests(void)
 {
-    XAcode err = XA_OK;
-    struct dns_response *resp = NULL;
+    XAcode err                    = XA_OK;
+    struct dns_response *resp     = NULL;
     struct dns_xmidt_token *token = NULL;
     struct dns_response r;
 
@@ -455,7 +456,7 @@ void test_shrink_without_crash(void)
     __nq_buf_len = 651;
 
     while (__nq_buf_len) {
-        XAcode err = XA_OK;
+        XAcode err                = XA_OK;
         struct dns_response *resp = NULL;
 
         __nq_buf_len--;
@@ -470,7 +471,7 @@ void test_shrink_without_crash(void)
 void test_ninit_fails(void)
 {
     struct dns_response *resp = NULL;
-    XAcode err = XA_OK;
+    XAcode err                = XA_OK;
 
     __ninit_rv = -1;
     CU_ASSERT(XA_DNS_RESOLVER_ERROR == dns_txt_fetch("112233445566.test-xmidt-example.com", &resp, &err));
@@ -500,7 +501,7 @@ void add_suites(CU_pSuite *suite)
 /*----------------------------------------------------------------------------*/
 int main(void)
 {
-    unsigned rv = 1;
+    unsigned rv     = 1;
     CU_pSuite suite = NULL;
 
     if (CUE_SUCCESS == CU_initialize_registry()) {
@@ -602,7 +603,7 @@ static void set_extra_line_record()
         0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -668,7 +669,7 @@ static void set_normal_record()
         0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -738,7 +739,7 @@ static void set_missing_record()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -814,7 +815,7 @@ static void set_several_record()
         0x00, 0x29, 0xff, 0xd6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -826,7 +827,7 @@ static void set_several_record()
  * 00000030: 0000 1000 01c0 0c00 1000 0100 0001 2c00  ..............,.
  * 00000040: 0c0b 6e6f 7420 6865 6c70 6675 6c00 0029  ..not helpful..)
  * 00000050: ffd6 0000 0000 0000                      ........
-*/
+ */
 static void set_nothing_for_us_record()
 {
     static const uint8_t d[] = {
@@ -840,7 +841,7 @@ static void set_nothing_for_us_record()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -859,7 +860,7 @@ static void set_rcode1()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -878,7 +879,7 @@ static void set_rcode2()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -897,7 +898,7 @@ static void set_rcode3()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -916,7 +917,7 @@ static void set_rcode4()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -935,7 +936,7 @@ static void set_rcode5()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -954,7 +955,7 @@ static void set_rcode6()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -973,7 +974,7 @@ static void set_not_a_response()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -992,7 +993,7 @@ static void set_different_opcode()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -1009,7 +1010,7 @@ static void set_very_short_answer()
         0xd6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -1027,7 +1028,7 @@ static void set_invalid_answer()
         0xd6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = 57;
 }
 
@@ -1046,7 +1047,7 @@ static void set_invalid_name_len()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -1065,7 +1066,7 @@ static void set_too_many_questions()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
 
@@ -1084,7 +1085,6 @@ static void set_no_answers()
         0x00, 0x00, 0x00, 0x00
     };
 
-    __nq_buf = d;
+    __nq_buf     = d;
     __nq_buf_len = sizeof(d);
 }
-

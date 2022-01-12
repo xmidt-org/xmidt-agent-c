@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <cutils/memory.h>
@@ -67,12 +67,12 @@ static bool does_ext_match(const char *ext, size_t ext_len, const char *filename
 /*----------------------------------------------------------------------------*/
 struct cfg_file *cfg_file_insert(struct cfg_file *list, char *filename)
 {
-    struct cfg_file *p = list;
+    struct cfg_file *p    = list;
     struct cfg_file *last = NULL;
     struct cfg_file *node = must_calloc(sizeof(struct cfg_file), 1);
 
     node->filename = filename;
-    node->next = NULL;
+    node->next     = NULL;
     if (NULL == p) {
         return node;
     }
@@ -83,7 +83,7 @@ struct cfg_file *cfg_file_insert(struct cfg_file *list, char *filename)
         if (cmp < 0) {
             /* p < n, move on */
             last = p;
-            p = p->next;
+            p    = p->next;
         } else if (NULL == last) {
             /* p == n, or n < p, insert at the beginning of the list */
             node->next = list;
@@ -124,11 +124,11 @@ struct cfg_file *cfg_file_list_from_path(const char *path,
                                          XAcode *rv)
 {
     struct stat sb;
-    DIR *d = NULL;
-    struct dirent *dir = NULL;
+    DIR *d                = NULL;
+    struct dirent *dir    = NULL;
     struct cfg_file *list = NULL;
-    size_t path_len = cu_strnlen(path, (PATH_MAX + 1));
-    size_t ext_len = cu_strnlen(ext, NAME_MAX);
+    size_t path_len       = cu_strnlen(path, (PATH_MAX + 1));
+    size_t ext_len        = cu_strnlen(ext, NAME_MAX);
 
     if (path_len == (PATH_MAX + 1)) {
         *rv = XA_PATH_TOO_LONG;
@@ -160,7 +160,7 @@ struct cfg_file *cfg_file_list_from_path(const char *path,
             continue;
         }
 
-        fn = must_maprintf("%.*s/%s", (int)path_len, path, dir->d_name);
+        fn = must_maprintf("%.*s/%s", (int) path_len, path, dir->d_name);
 
         if ((0 == stat(fn, &sb)) && S_ISREG(sb.st_mode)) {
             list = cfg_file_insert(list, fn);

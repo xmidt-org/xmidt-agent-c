@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <resolv.h>
@@ -37,16 +37,16 @@
 
 static uint16_t get_u16(const uint8_t *buf, int i)
 {
-    return (uint16_t)(((0xff & buf[i]) << 8) | (0xff & buf[i + 1]));
+    return (uint16_t) (((0xff & buf[i]) << 8) | (0xff & buf[i + 1]));
 }
 
 
 static uint32_t get_u32(const uint8_t *buf, int i)
 {
-    return (uint32_t)(((0xff & buf[i]) << 24)
-                      | ((0xff & buf[i + 1]) << 16)
-                      | ((0xff & buf[i + 2]) << 8)
-                      | (0xff & buf[i + 3]));
+    return (uint32_t) (((0xff & buf[i]) << 24)
+                       | ((0xff & buf[i + 1]) << 16)
+                       | ((0xff & buf[i + 2]) << 8)
+                       | (0xff & buf[i + 3]));
 }
 
 
@@ -183,10 +183,10 @@ static XAcode process_answers(struct dns_response *resp, int *i, XAcode *err)
 
 static XAcode process_dns_response(struct dns_response *resp, XAcode *err)
 {
-    int rcode = 0;
+    int rcode        = 0;
     uint16_t qdcount = 0;
     uint16_t ancount = 0;
-    int i = 0;
+    int i            = 0;
 
     if (resp->len < 12) {
         return xa_set_error(err, XA_DNS_RECORD_TOO_SHORT);
@@ -210,12 +210,12 @@ static XAcode process_dns_response(struct dns_response *resp, XAcode *err)
     rcode = 0x0f & resp->full[3];
     if (0 != rcode) {
         switch (rcode) {
-        case 1: *err = XA_DNS_FORMAT_ERROR; break;    /* DNS Format error - fatal */
-        case 2: *err = XA_DNS_SERVER_ERROR; break;    /* DNS Server failure - retry */
-        case 3: *err = XA_DNS_NAME_ERROR; break;      /* DNS Name error - fatal */
-        case 4: *err = XA_DNS_NOT_IMPLEMENTED; break; /* DNS Not implemented - retry */
-        case 5: *err = XA_DNS_REFUSED; break;         /* DNS Refused - fatal */
-        default: *err = XA_DNS_UNKNOWN_VALUE; break;  /* DNS Unknown - retry */
+            case 1: *err = XA_DNS_FORMAT_ERROR; break;    /* DNS Format error - fatal */
+            case 2: *err = XA_DNS_SERVER_ERROR; break;    /* DNS Server failure - retry */
+            case 3: *err = XA_DNS_NAME_ERROR; break;      /* DNS Name error - fatal */
+            case 4: *err = XA_DNS_NOT_IMPLEMENTED; break; /* DNS Not implemented - retry */
+            case 5: *err = XA_DNS_REFUSED; break;         /* DNS Refused - fatal */
+            default: *err = XA_DNS_UNKNOWN_VALUE; break;  /* DNS Unknown - retry */
         }
         return *err;
     }
@@ -254,8 +254,8 @@ static XAcode append_frag(const struct dns_rr *rr, int *last_frag,
                           struct dns_xmidt_token *token, XAcode *err)
 {
     const uint8_t *data = NULL;
-    uint16_t rdlen = 0;
-    int fragment = 0;
+    uint16_t rdlen      = 0;
+    int fragment        = 0;
 
     /* Skip if not a TXT record. */
     if (ns_t_txt != rr->type) {
@@ -263,7 +263,7 @@ static XAcode append_frag(const struct dns_rr *rr, int *last_frag,
     }
 
     /* We know that rdata can't be NULL. */
-    data = rr->rdata;
+    data  = rr->rdata;
     rdlen = rr->rdlength;
 
     /* Skip if it isn't what we're expecting. */
@@ -276,14 +276,14 @@ static XAcode append_frag(const struct dns_rr *rr, int *last_frag,
     rdlen--;
 
     /* safe because we know that data[3] is ':' */
-    fragment = atoi((const char *)data);
+    fragment = atoi((const char *) data);
 
     /* If this is the not next fragment, exit. */
     if (fragment != (*last_frag + 1)) {
         return XA_OK;
     }
 
-    if (NULL == memappend((void **)&token->buf, &token->len, &data[3], rdlen - 3)) {
+    if (NULL == memappend((void **) &token->buf, &token->len, &data[3], rdlen - 3)) {
         return xa_set_error(err, XA_OUT_OF_MEMORY);
     }
 
@@ -305,7 +305,7 @@ void dns_destroy_response(struct dns_response *r)
     if (r) {
         while (r->answers) {
             struct dns_rr *p = r->answers;
-            r->answers = r->answers->next;
+            r->answers       = r->answers->next;
             free(p);
         }
 
@@ -333,7 +333,7 @@ XAcode dns_txt_fetch(const char *fqdn, struct dns_response **resp, XAcode *err)
     struct dns_response *p = NULL;
     struct __res_state state;
     uint8_t buf[NS_MAXMSG];
-    int len = -1;
+    int len  = -1;
     XAcode e = XA_OK;
 
     if (!fqdn || !resp) {
@@ -362,7 +362,7 @@ XAcode dns_txt_fetch(const char *fqdn, struct dns_response **resp, XAcode *err)
         return xa_set_error(err, XA_OUT_OF_MEMORY);
     }
 
-    p->len = len;
+    p->len  = len;
     p->full = memdup(buf, p->len);
     if (!p->full) {
         free(p);
@@ -384,7 +384,7 @@ XAcode dns_token_assemble(const struct dns_response *resp,
                           struct dns_xmidt_token **token,
                           XAcode *err)
 {
-    int fragment = 0;
+    int fragment  = 0;
     int last_frag = -1;
     struct dns_xmidt_token t;
     XAcode e = XA_OK;

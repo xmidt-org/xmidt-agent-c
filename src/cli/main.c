@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <stddef.h>
@@ -38,7 +38,7 @@ static volatile bool done;
 
 static void handle_lifecycle_command(enum signals_command e)
 {
-    (void)e;
+    (void) e;
 
     done = true;
 }
@@ -49,11 +49,11 @@ static void handle_lifecycle_command(enum signals_command e)
 int main(int argc, char *argv[])
 {
     XAcode xa_rv = XA_OK;
-    config_t *c = NULL;
+    config_t *c  = NULL;
 
     /* Handle args */
     log_info("hello, world");
-    c = config_from_cli(argc, (const char **)argv, &xa_rv);
+    c = config_from_cli(argc, (const char **) argv, &xa_rv);
     if (!c) {
         return -1;
     }

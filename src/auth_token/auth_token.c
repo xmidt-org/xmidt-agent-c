@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <stddef.h>
@@ -148,8 +148,8 @@ static int build_header_list(const struct auth_info *in, struct curl_slist **lis
 
 static size_t response_cb(const void *buffer, size_t size, size_t nmemb, void *data)
 {
-    struct auth_response *r = (struct auth_response *)data;
-    size_t len = size * nmemb;
+    struct auth_response *r = (struct auth_response *) data;
+    size_t len              = size * nmemb;
 
     r->payload = realloc(r->payload, r->len + len);
     if (!r->payload) {
@@ -193,10 +193,10 @@ static int easy_getinfo__off_t(CURLcode *rv, CURL *curl, CURLINFO info, curl_off
 /*----------------------------------------------------------------------------*/
 CURLcode auth_token_req(const struct auth_info *in, struct auth_response *r)
 {
-    CURLcode rv = CURLE_OK;
-    CURL *curl = NULL;
+    CURLcode rv             = CURLE_OK;
+    CURL *curl              = NULL;
     struct curl_slist *list = NULL;
-    long tls_version = CURL_SSLVERSION_MAX_DEFAULT;
+    long tls_version        = CURL_SSLVERSION_MAX_DEFAULT;
 
     if (0 != in->tls_version) {
         tls_version = in->tls_version;
@@ -244,7 +244,7 @@ CURLcode auth_token_req(const struct auth_info *in, struct auth_response *r)
         && !set_verbose_opt(&rv, curl, in->verbose_stream)
         && !set_pointer_opt(&rv, curl, CURLOPT_HTTPHEADER, list))
     {
-        rv = curl_easy_perform(curl);
+        rv       = curl_easy_perform(curl);
         r->state = REQ_STATE__PERFORMED;
 
         if ((CURLE_OK == rv)

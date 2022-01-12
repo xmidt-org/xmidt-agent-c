@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <stddef.h>
@@ -29,7 +29,7 @@
         __curl_easy_setopt = NULL;               \
     } while (0)
 
-#define str(s) #s
+#define str(s)  #s
 #define xstr(s) str(s)
 
 /* The latest version */
@@ -56,30 +56,31 @@
 
 void test_inputs_00() /* All the options basically */
 {
-    int brw = 123;
+    int brw                   = 123;
     const struct auth_info in = {
-        .url = "https://example.com",
-        .interface = "eth0",
-        .timeout = 12,
-        .ip_resolve = CURL_IPRESOLVE_V4,
-        .verbose_stream = stdout,
-        .max_redirects = 50,
-        .client_cert_path = "/cert/path",
-        .private_key_path = "/key/path",
-        .ca_bundle_path = NULL,
-        .tls_version = 0,
-        .mac_address = "mac:112233445566",
-        .serial_number = "sn:abcdef",
-        .uuid = "1bbb60c8-22ef-4321-a5ca-7216b716f807",
-        .partner_id = "partner",
-        .hardware_model = "model 1",
+        .url                   = "https://example.com",
+        .interface             = "eth0",
+        .timeout               = 12,
+        .ip_resolve            = CURL_IPRESOLVE_V4,
+        .verbose_stream        = stdout,
+        .max_redirects         = 50,
+        .client_cert_path      = "/cert/path",
+        .private_key_path      = "/key/path",
+        .ca_bundle_path        = NULL,
+        .tls_version           = 0,
+        .mac_address           = "mac:112233445566",
+        .serial_number         = "sn:abcdef",
+        .uuid                  = "1bbb60c8-22ef-4321-a5ca-7216b716f807",
+        .partner_id            = "partner",
+        .hardware_model        = "model 1",
         .hardware_manufacturer = "maker 0",
-        .firmware_name = "firmware 12",
-        .protocol = "xmidt-proto 1.3",
-        .last_reboot_reason = "power loss",
+        .firmware_name         = "firmware 12",
+        .protocol              = "xmidt-proto 1.3",
+        .last_reboot_reason    = "power loss",
         .last_reconnect_reason = "connection broken",
-        .boot_retry_wait = &brw,
+        .boot_retry_wait       = &brw,
     };
+    // clang-format off
     struct curl_easy_perform_data write[2] = {
         {
             .next = NULL,
@@ -92,13 +93,15 @@ void test_inputs_00() /* All the options basically */
             .len = 5,
         },
     };
+    // clang-format on
     struct auth_response out;
 
-    write[0].next = &write[1];
+    write[0].next       = &write[1];
     __curl_easy_perform = write;
 
     CU_ASSERT(CURLE_OK == auth_token_req(&in, &out));
 
+    // clang-format off
     validate_and_reset("CURLOPT_URL              : https://example.com",
                        "CURLOPT_SSLVERSION       : " xstr(MY_CURL_SSLVERSION_TLS),
                        "CURLOPT_WRITEFUNCTION    : pointer",
@@ -129,6 +132,7 @@ void test_inputs_00() /* All the options basically */
                        "X-Midt-Interface-Used: eth0",
                        "X-Midt-Last-Reboot-Reason: power loss",
                        "X-Midt-Last-Reconnect-Reason: connection broken");
+    // clang-format on
 
     CU_ASSERT_FATAL(NULL != out.payload);
     CU_ASSERT_FATAL(10 == out.len);
@@ -142,32 +146,33 @@ void test_inputs_00() /* All the options basically */
 void test_inputs_01() /* Let some options be missing & set tls to something else */
 {
     const struct auth_info in = {
-        .url = "https://example.com",
-        .interface = NULL,
-        .timeout = 0,
-        .ip_resolve = CURL_IPRESOLVE_V6,
-        .verbose_stream = NULL,
-        .max_redirects = 0,
-        .client_cert_path = NULL,
-        .private_key_path = NULL,
-        .ca_bundle_path = NULL,
-        .tls_version = 12,
-        .mac_address = NULL,
-        .serial_number = NULL,
-        .uuid = NULL,
-        .partner_id = NULL,
-        .hardware_model = NULL,
+        .url                   = "https://example.com",
+        .interface             = NULL,
+        .timeout               = 0,
+        .ip_resolve            = CURL_IPRESOLVE_V6,
+        .verbose_stream        = NULL,
+        .max_redirects         = 0,
+        .client_cert_path      = NULL,
+        .private_key_path      = NULL,
+        .ca_bundle_path        = NULL,
+        .tls_version           = 12,
+        .mac_address           = NULL,
+        .serial_number         = NULL,
+        .uuid                  = NULL,
+        .partner_id            = NULL,
+        .hardware_model        = NULL,
         .hardware_manufacturer = NULL,
-        .firmware_name = NULL,
-        .protocol = NULL,
-        .last_reboot_reason = NULL,
+        .firmware_name         = NULL,
+        .protocol              = NULL,
+        .last_reboot_reason    = NULL,
         .last_reconnect_reason = NULL,
-        .boot_retry_wait = NULL,
+        .boot_retry_wait       = NULL,
     };
     struct auth_response out;
 
     auth_token_req(&in, &out);
 
+    // clang-format off
     validate_and_reset("CURLOPT_URL              : https://example.com",
                        "CURLOPT_SSLVERSION       : 12",
                        "CURLOPT_WRITEFUNCTION    : pointer",
@@ -181,6 +186,7 @@ void test_inputs_01() /* Let some options be missing & set tls to something else
                        "CURLOPT_FRESH_CONNECT    : 1",
                        "CURLOPT_SSL_VERIFYHOST   : 2",
                        "CURLOPT_SSL_VERIFYPEER   : 1");
+    // clang-format on
 }
 
 void add_suites(CU_pSuite *suite)
@@ -196,7 +202,7 @@ void add_suites(CU_pSuite *suite)
 /*----------------------------------------------------------------------------*/
 int main(void)
 {
-    unsigned rv = 1;
+    unsigned rv     = 1;
     CU_pSuite suite = NULL;
 
     if (CUE_SUCCESS == CU_initialize_registry()) {

@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include <stdarg.h>
@@ -55,11 +55,11 @@ CURL *curl_easy_init()
     CURL *rv = NULL;
 
     if (__curl_easy_init) {
-        rv = (CURL *)__curl_easy_init->rv;
+        rv = (CURL *) __curl_easy_init->rv;
         SEEN_AND_NEXT(__curl_easy_init);
     } else {
         /* Really don't care, just not NULL. */
-        rv = (CURL *)42;
+        rv = (CURL *) 42;
     }
 
     return rv;
@@ -92,7 +92,7 @@ CURLcode curl_easy_setopt(CURL *easy, CURLoption option, ...)
 {
     va_list ap;
     char buf[256];
-    int width = 25;
+    int width            = 25;
     struct curl_slist *p = NULL;
 
     CU_ASSERT(NULL != easy);
@@ -101,87 +101,87 @@ CURLcode curl_easy_setopt(CURL *easy, CURLoption option, ...)
 
     va_start(ap, option);
     switch (option) {
-    case CURLOPT_URL:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_URL", va_arg(ap, const char *));
-        break;
-    case CURLOPT_FOLLOWLOCATION:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FOLLOWLOCATION", va_arg(ap, long));
-        break;
-    case CURLOPT_MAXREDIRS:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_MAXREDIRS", va_arg(ap, long));
-        break;
-    case CURLOPT_IPRESOLVE:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_IPRESOLVE", va_arg(ap, long));
-        break;
-    case CURLOPT_INTERFACE:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_INTERFACE", va_arg(ap, const char *));
-        break;
-    case CURLOPT_SSLVERSION:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSLVERSION", va_arg(ap, long));
-        break;
-    case CURLOPT_SSL_VERIFYPEER:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSL_VERIFYPEER", va_arg(ap, long));
-        break;
-    case CURLOPT_SSL_VERIFYHOST:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSL_VERIFYHOST", va_arg(ap, long));
-        break;
-    case CURLOPT_VERBOSE:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_VERBOSE", va_arg(ap, long));
-        break;
-    case CURLOPT_HTTP_VERSION:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_HTTP_VERSION", va_arg(ap, long));
-        break;
-    case CURLOPT_UPLOAD:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_UPLOAD", va_arg(ap, long));
-        break;
-    case CURLOPT_CUSTOMREQUEST:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_CUSTOMREQUEST", va_arg(ap, const char *));
-        break;
-    case CURLOPT_FORBID_REUSE:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FORBID_REUSE", va_arg(ap, long));
-        break;
-    case CURLOPT_FRESH_CONNECT:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FRESH_CONNECT", va_arg(ap, long));
-        break;
-    case CURLOPT_STDERR:
-        snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_STDERR");
-        break;
-    case CURLOPT_WRITEFUNCTION:
-        snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_WRITEFUNCTION");
-        __writefunction = va_arg(ap, size_t(*)(const void *, size_t, size_t, void *));
-        break;
-    case CURLOPT_WRITEDATA:
-        snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_WRITEDATA");
-        __writedata = va_arg(ap, void *);
-        break;
-    case CURLOPT_TIMEOUT:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_TIMEOUT", va_arg(ap, long));
-        break;
-    case CURLOPT_DNS_CACHE_TIMEOUT:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_DNS_CACHE_TIMEOUT", va_arg(ap, long));
-        break;
-    case CURLOPT_SSLCERT:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_SSLCERT", va_arg(ap, const char *));
-        break;
-    case CURLOPT_SSLKEY:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_SSLKEY", va_arg(ap, const char *));
-        break;
-    case CURLOPT_CAINFO:
-        snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_CAINFO", va_arg(ap, const char *));
-        break;
-    case CURLOPT_HTTPHEADER: /* pointer to headers */
-        p = va_arg(ap, struct curl_slist *);
-        break;
-    default:
-        snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_unknown", (long)option);
-        break;
+        case CURLOPT_URL:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_URL", va_arg(ap, const char *));
+            break;
+        case CURLOPT_FOLLOWLOCATION:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FOLLOWLOCATION", va_arg(ap, long));
+            break;
+        case CURLOPT_MAXREDIRS:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_MAXREDIRS", va_arg(ap, long));
+            break;
+        case CURLOPT_IPRESOLVE:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_IPRESOLVE", va_arg(ap, long));
+            break;
+        case CURLOPT_INTERFACE:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_INTERFACE", va_arg(ap, const char *));
+            break;
+        case CURLOPT_SSLVERSION:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSLVERSION", va_arg(ap, long));
+            break;
+        case CURLOPT_SSL_VERIFYPEER:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSL_VERIFYPEER", va_arg(ap, long));
+            break;
+        case CURLOPT_SSL_VERIFYHOST:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_SSL_VERIFYHOST", va_arg(ap, long));
+            break;
+        case CURLOPT_VERBOSE:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_VERBOSE", va_arg(ap, long));
+            break;
+        case CURLOPT_HTTP_VERSION:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_HTTP_VERSION", va_arg(ap, long));
+            break;
+        case CURLOPT_UPLOAD:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_UPLOAD", va_arg(ap, long));
+            break;
+        case CURLOPT_CUSTOMREQUEST:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_CUSTOMREQUEST", va_arg(ap, const char *));
+            break;
+        case CURLOPT_FORBID_REUSE:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FORBID_REUSE", va_arg(ap, long));
+            break;
+        case CURLOPT_FRESH_CONNECT:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_FRESH_CONNECT", va_arg(ap, long));
+            break;
+        case CURLOPT_STDERR:
+            snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_STDERR");
+            break;
+        case CURLOPT_WRITEFUNCTION:
+            snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_WRITEFUNCTION");
+            __writefunction = va_arg(ap, size_t(*)(const void *, size_t, size_t, void *));
+            break;
+        case CURLOPT_WRITEDATA:
+            snprintf(buf, sizeof(buf), "%-*s: pointer", width, "CURLOPT_WRITEDATA");
+            __writedata = va_arg(ap, void *);
+            break;
+        case CURLOPT_TIMEOUT:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_TIMEOUT", va_arg(ap, long));
+            break;
+        case CURLOPT_DNS_CACHE_TIMEOUT:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_DNS_CACHE_TIMEOUT", va_arg(ap, long));
+            break;
+        case CURLOPT_SSLCERT:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_SSLCERT", va_arg(ap, const char *));
+            break;
+        case CURLOPT_SSLKEY:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_SSLKEY", va_arg(ap, const char *));
+            break;
+        case CURLOPT_CAINFO:
+            snprintf(buf, sizeof(buf), "%-*s: %s", width, "CURLOPT_CAINFO", va_arg(ap, const char *));
+            break;
+        case CURLOPT_HTTPHEADER: /* pointer to headers */
+            p = va_arg(ap, struct curl_slist *);
+            break;
+        default:
+            snprintf(buf, sizeof(buf), "%-*s: %ld", width, "CURLOPT_unknown", (long) option);
+            break;
     }
     va_end(ap);
 
     if (p) {
         while (p) {
             __curl_easy_setopt = curl_slist_append(__curl_easy_setopt, p->data);
-            p = p->next;
+            p                  = p->next;
         }
     } else {
         if (*buf) {
@@ -195,15 +195,15 @@ CURLcode curl_easy_setopt(CURL *easy, CURLoption option, ...)
 
 CURLcode curl_easy_getinfo(CURL *easy, CURLINFO info, ...)
 {
-    (void)easy;
-    (void)info;
+    (void) easy;
+    (void) info;
 
     return CURLE_OK;
 }
 
 void curl_easy_cleanup(CURL *easy)
 {
-    (void)easy;
+    (void) easy;
 }
 
 struct curl_easy_perform_data {
@@ -213,7 +213,7 @@ struct curl_easy_perform_data {
 };
 
 struct curl_easy_perform_data *__curl_easy_perform = NULL;
-CURLcode __curl_easy_perform__rv = CURLE_OK;
+CURLcode __curl_easy_perform__rv                   = CURLE_OK;
 CURLcode curl_easy_perform(CURL *easy)
 {
 
@@ -228,7 +228,7 @@ CURLcode curl_easy_perform(CURL *easy)
             __curl_easy_perform = __curl_easy_perform->next;
         }
     }
-    (void)easy;
+    (void) easy;
     return __curl_easy_perform__rv;
 }
 
@@ -286,7 +286,7 @@ void curl_slist_free_all(struct curl_slist *list)
     while (list) {
         struct curl_slist *tmp;
 
-        tmp = list;
+        tmp  = list;
         list = list->next;
         free(tmp->data);
         free(tmp);
@@ -314,4 +314,3 @@ void curl_slist_compare(struct curl_slist *list, const char *s[])
         s++;
     }
 }
-

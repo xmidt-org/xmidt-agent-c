@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 #define _POSIX_C_SOURCE 200809L
 
@@ -73,7 +73,7 @@ static void sig_term(int sig)
 
 static void default_shutdown(enum signals_command e)
 {
-    (void)e;
+    (void) e;
 
     log_fatal("lifecycle command: default handler just exit(-1)");
     exit(-1);

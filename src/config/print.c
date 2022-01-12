@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 #include "../logging/log.h"
@@ -10,7 +10,7 @@
 /*                                   Macros                                   */
 /*----------------------------------------------------------------------------*/
 #define COLOR "\x1b[38;5;99m"
-#define RST "\x1b[0m"
+#define RST   "\x1b[0m"
 
 /*----------------------------------------------------------------------------*/
 /*                               Data Structures                              */
@@ -62,7 +62,7 @@ void config_print(const config_t *c)
         log_debug(COLOR "-- behavior.dns_txt ------------------------------" RST);
         log_debug("%-*s: '%s'", offset, ".behavior.dns_txt.base_fqdn", c->behavior.dns_txt.base_fqdn.s);
         log_debug(COLOR "-- behavior.dns_txt.jwt.alg_allowed --------------" RST);
-        for (int i = 0; i < c->behavior.dns_txt.jwt.alg_count; i++) {
+        for (size_t i = 0; i < c->behavior.dns_txt.jwt.alg_count; i++) {
             log_debug(".behavior.dns_txt.jwt.algs[%zd]: %d", i, c->behavior.dns_txt.jwt.algs[i]);
         }
         log_debug(COLOR "-- behavior.issuer -------------------------------" RST);

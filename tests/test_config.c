@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 #include <CUnit/Basic.h>
 #include <cutils/memory.h>
@@ -14,12 +14,12 @@ static char *base_dir;
 
 void test_not_a_dir(void)
 {
-    char *path = must_maprintf("%s/cfg/missing", base_dir);
+    char *path  = must_maprintf("%s/cfg/missing", base_dir);
     config_t *c = NULL;
     XAcode rv;
 
     rv = XA_OK;
-    c = config_read(path, &rv);
+    c  = config_read(path, &rv);
 
     CU_ASSERT(NULL == c);
     CU_ASSERT(rv == XA_NOT_A_DIR);
@@ -27,8 +27,8 @@ void test_not_a_dir(void)
     free(path);
 
     path = must_maprintf("%s/cfg/file", base_dir);
-    rv = XA_OK;
-    c = config_read(path, &rv);
+    rv   = XA_OK;
+    c    = config_read(path, &rv);
 
     CU_ASSERT(NULL == c);
     CU_ASSERT(rv == XA_NOT_A_DIR);
@@ -40,8 +40,8 @@ void test_not_a_dir(void)
 void test_file_too_long(void)
 {
     char *long_string = NULL;
-    char *path = NULL;
-    config_t *c = NULL;
+    char *path        = NULL;
+    config_t *c       = NULL;
     XAcode rv;
 
     long_string = must_calloc(sizeof(char), 5000);
@@ -49,7 +49,7 @@ void test_file_too_long(void)
     path = must_maprintf("%s/%s", base_dir, long_string);
 
     rv = XA_OK;
-    c = config_read(path, &rv);
+    c  = config_read(path, &rv);
 
     CU_ASSERT(NULL == c);
     CU_ASSERT(rv == XA_PATH_TOO_LONG);
@@ -61,12 +61,12 @@ void test_file_too_long(void)
 
 void test_simple(const char *dir)
 {
-    char *path = must_maprintf("%s/cfg/%s", base_dir, dir);
+    char *path  = must_maprintf("%s/cfg/%s", base_dir, dir);
     config_t *c = NULL;
     XAcode rv;
 
     rv = XA_OK;
-    c = config_read(path, &rv);
+    c  = config_read(path, &rv);
     CU_ASSERT_FATAL(NULL != c);
     CU_ASSERT_FATAL(XA_OK == rv);
 
@@ -104,12 +104,12 @@ void simple(void)
 
 void invalid_test(const char *dir, XAcode want)
 {
-    char *path = must_maprintf("%s/cfg/%s", base_dir, dir);
+    char *path  = must_maprintf("%s/cfg/%s", base_dir, dir);
     config_t *c = NULL;
     XAcode rv;
 
     rv = XA_OK;
-    c = config_read(path, &rv);
+    c  = config_read(path, &rv);
     printf("path: %s\n", path);
     CU_ASSERT_FATAL(NULL == c);
     CU_ASSERT_FATAL(want == rv);
@@ -133,12 +133,12 @@ void invalid(void)
 
 void verify_print_does_not_crash(void)
 {
-    char *path = must_maprintf("%s/cfg/test_1", base_dir);
+    char *path  = must_maprintf("%s/cfg/test_1", base_dir);
     config_t *c = NULL;
     XAcode rv;
 
     rv = XA_OK;
-    c = config_read(path, &rv);
+    c  = config_read(path, &rv);
     CU_ASSERT_FATAL(NULL != c);
     CU_ASSERT_FATAL(XA_OK == rv);
 
@@ -172,7 +172,7 @@ void add_suites(CU_pSuite *suite)
 /*----------------------------------------------------------------------------*/
 int main(int argc, char *argv[])
 {
-    unsigned rv = 1;
+    unsigned rv     = 1;
     CU_pSuite suite = NULL;
 
     if (2 != argc) {

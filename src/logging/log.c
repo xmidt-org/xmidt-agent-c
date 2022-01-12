@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2021 Comcast Cable Communications Management, LLC */
+/* SPDX-FileCopyrightText: 2021-2022 Comcast Cable Communications Management, LLC */
 /* SPDX-License-Identifier: Apache-2.0 */
 
 /* Needed for gmtime_r() */
@@ -18,10 +18,10 @@
 /*----------------------------------------------------------------------------*/
 /* none */
 #define BOLD "\x1b[1m"
-#define DIM "\x1b[2m"
+#define DIM  "\x1b[2m"
 #define DRED "\x1b[31m"
 #define DYEL "\x1b[33m"
-#define WHT "\x1b[97m"
+#define WHT  "\x1b[97m"
 
 #define TS DIM WHT
 
@@ -31,8 +31,8 @@
 enum level {
     TRACE = 0,
     DEBUG = 1,
-    INFO = 2,
-    WARN = 3,
+    INFO  = 2,
+    WARN  = 3,
     ERROR = 4,
     FATAL = 5,
 };
@@ -45,30 +45,30 @@ struct log_opts {
 };
 
 const struct log_opts _opts[6] = {
-    { .ts_color = TS,
-      .level_color = "\x1b[2m",
-      .level = "TRACE",
-      .payload_color = "" },
-    { .ts_color = TS,
-      .level_color = "",
-      .level = "DEBUG",
-      .payload_color = "" },
-    { .ts_color = TS,
-      .level_color = DIM DYEL,
-      .level = "INFO ",
-      .payload_color = "" },
-    { .ts_color = TS,
-      .level_color = DYEL,
-      .level = "WARN ",
-      .payload_color = "" },
-    { .ts_color = TS,
-      .level_color = DIM DRED,
-      .level = "ERROR",
-      .payload_color = "" },
-    { .ts_color = TS,
-      .level_color = BOLD DRED,
-      .level = "FATAL",
-      .payload_color = "" },
+    {.ts_color      = TS,
+     .level_color   = "\x1b[2m",
+     .level         = "TRACE",
+     .payload_color = ""},
+    {.ts_color      = TS,
+     .level_color   = "",
+     .level         = "DEBUG",
+     .payload_color = ""},
+    {.ts_color      = TS,
+     .level_color   = DIM DYEL,
+     .level         = "INFO ",
+     .payload_color = ""},
+    {.ts_color      = TS,
+     .level_color   = DYEL,
+     .level         = "WARN ",
+     .payload_color = ""},
+    {.ts_color      = TS,
+     .level_color   = DIM DRED,
+     .level         = "ERROR",
+     .payload_color = ""},
+    {.ts_color      = TS,
+     .level_color   = BOLD DRED,
+     .level         = "FATAL",
+     .payload_color = ""},
 };
 
 /*----------------------------------------------------------------------------*/

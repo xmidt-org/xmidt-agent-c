@@ -37,3 +37,4 @@ _test
 *.test
 *.prof
 *.xml
+*.sw*

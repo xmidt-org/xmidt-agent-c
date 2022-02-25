@@ -44,11 +44,12 @@ subdir('src')
 cjwt_dep             = dependency('cjwt',          version: '>=2.1.0', required: get_option('dns-txt-token'))
 curl_dep             = dependency('libcurl',       version: '>=7.66.0')
 curlws_dep           = dependency('curlws',        version: '>=1.0.4')
-cutils_dep           = dependency('cutils',        version: '>=2.1.0')
+cutils_dep           = dependency('cutils',        version: '>=2.1.1')
 libcjson_dep         = dependency('libcjson',      version: '>=1.7.14', fallback: ['cjson'])
 libtrower_base64_dep = dependency('trower-base64', version: '>=1.2.7')
 ludocode_mpack_dep   = dependency('mpack',         version: '>=1.0', fallback: ['ludocode-mpack', 'ludocode_mpack_dep'])
 otelc_dep            = dependency('otelc',         version: '>=0.0.0')
+thread_dep           = dependency('threads')
 uuid_dep             = dependency('uuid')
 wrpc_dep             = dependency('wrp-c',         version: '>=2.0.0')
 
@@ -62,6 +63,7 @@ all_dep = [cjwt_dep,
            libtrower_base64_dep,
            ludocode_mpack_dep,
            otelc_dep,
+           thread_dep,
            uuid_dep,
            wrpc_dep]
 

@@ -11,6 +11,14 @@
 #include "../error/codes.h"
 #include "../string.h"
 
+enum tls_version {
+    TLS_VERSION__MAX = 0,
+    TLS_VERSION__1_0,
+    TLS_VERSION__1_1,
+    TLS_VERSION__1_2,
+    TLS_VERSION__1_3
+};
+
 struct interface {
     struct xa_string name;
     int cost;
@@ -42,6 +50,7 @@ typedef struct {
         int ping_timeout;
         int backoff_max;
         int force_ip;
+        int verbosity_level;
 
         size_t interface_count;
         struct interface *interfaces;
@@ -59,6 +68,14 @@ typedef struct {
 
         struct {
             struct xa_string url;
+            int request_timeout; /* seconds to wait */
+            int max_redirects;   /* sets to -1 for unlimited, 0 for none, 1+ for a finite limit */
+            enum tls_version tls_version;
+            struct xa_string ca_bundle_path;
+            struct {
+                struct xa_string cert_path;
+                struct xa_string private_key_path;
+            } mtls;
         } issuer;
     } behavior;
 } config_t;

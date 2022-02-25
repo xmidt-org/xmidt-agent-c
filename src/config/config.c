@@ -19,7 +19,7 @@
 /*----------------------------------------------------------------------------*/
 /*                                   Macros                                   */
 /*----------------------------------------------------------------------------*/
-#define CTX_MAX_DEPTH 4
+#define CTX_MAX_DEPTH 5
 
 /*----------------------------------------------------------------------------*/
 /*                               Data Structures                              */
@@ -39,10 +39,22 @@ struct config_building {
     bool failed;
 };
 
+struct config_map {
+    const char *s;
+    int val;
+};
+
 /*----------------------------------------------------------------------------*/
 /*                            File Scoped Variables                           */
 /*----------------------------------------------------------------------------*/
-/* none */
+static const struct config_map tls_map[] = {
+    {.s = "1.0", .val = (int) TLS_VERSION__1_0},
+    {.s = "1.1", .val = (int) TLS_VERSION__1_1},
+    {.s = "1.2", .val = (int) TLS_VERSION__1_2},
+    {.s = "1.3", .val = (int) TLS_VERSION__1_3},
+    {.s = "max", .val = (int) TLS_VERSION__MAX},
+    { .s = NULL,                      .val = 0},
+};
 
 /*----------------------------------------------------------------------------*/
 /*                             Function Prototypes                            */
@@ -127,8 +139,8 @@ static XAcode process_string(const cJSON *json, const struct config_ctx *ctx,
  *  Convert what we expect to be a number object into an xa_string or fail
  *  if that is not possible.
  */
-static XAcode process_int(const cJSON *json, const struct config_ctx *ctx,
-                          const char *name, int *dest, XAcode *rv)
+static XAcode process_int___(const cJSON *json, const struct config_ctx *ctx,
+                             const char *name, int *dest, XAcode *rv)
 {
     const cJSON *val = cJSON_GetObjectItemCaseSensitive(json, name);
 
@@ -139,6 +151,45 @@ static XAcode process_int(const cJSON *json, const struct config_ctx *ctx,
             output_error(ctx, name, "number");
             *rv = XA_CONFIG_FILE_ERROR;
             return *rv;
+        }
+    }
+
+    return *rv;
+}
+
+
+/**
+ *  Convert what we expect to be an enum object from an xa_string or fail
+ *  if that is not possible.  The config_map should be an array with the last
+ *  item being set to all NULL/0.
+ */
+static XAcode process_enum__(const cJSON *json, const struct config_ctx *ctx,
+                             const char *name, int *dest, const struct config_map *map,
+                             XAcode *rv)
+{
+    const cJSON *val = cJSON_GetObjectItemCaseSensitive(json, name);
+
+    if (val) {
+        if (val->type != cJSON_String) {
+            output_error(ctx, name, "enum");
+            *rv = XA_CONFIG_FILE_ERROR;
+            return *rv;
+        }
+
+        if (val->valuestring) {
+            int i = 0;
+
+            /* do the mapping. */
+            while (map[i].s && strcmp(map[i].s, val->valuestring)) {
+                i++;
+            }
+
+            if (map[i].s) {
+                *dest = map[i].val;
+            } else {
+                output_error(ctx, name, "enum");
+                *rv = XA_CONFIG_FILE_ERROR;
+            }
         }
     }
 
@@ -242,7 +293,7 @@ static XAcode process_interfaces(const cJSON *json, struct config_ctx *ctx,
             struct interface *present = NULL;
 
             process_string(item, ctx, "name", &ni->name, rv);
-            process_int(item, ctx, "cost", &ni->cost, rv);
+            process_int___(item, ctx, "cost", &ni->cost, rv);
 
             present = hashmap_get(&cfg->interfaces, ni->name.s, ni->name.len);
             if (NULL != present) {
@@ -353,9 +404,9 @@ static XAcode json_to_config(const cJSON *json, struct config_ctx *ctx,
         const cJSON *issuer  = NULL;
 
         process_string(obj, ctx, "url", &cfg->c->behavior.url, rv);
-        process_int(obj, ctx, "ping_timeout", &cfg->c->behavior.ping_timeout, rv);
-        process_int(obj, ctx, "backoff_max", &cfg->c->behavior.backoff_max, rv);
-        process_int(obj, ctx, "force_ip", &cfg->c->behavior.force_ip, rv);
+        process_int___(obj, ctx, "ping_timeout", &cfg->c->behavior.ping_timeout, rv);
+        process_int___(obj, ctx, "backoff_max", &cfg->c->behavior.backoff_max, rv);
+        process_int___(obj, ctx, "force_ip", &cfg->c->behavior.force_ip, rv);
 
         process_interfaces(obj, ctx, cfg, rv);
 
@@ -376,7 +427,20 @@ static XAcode json_to_config(const cJSON *json, struct config_ctx *ctx,
 
         issuer = process_obj(obj, ctx, "issuer");
         if (issuer) {
+            const cJSON *mtls = NULL;
+
             process_string(issuer, ctx, "url", &cfg->c->behavior.issuer.url, rv);
+            process_int___(issuer, ctx, "request_timeout", &cfg->c->behavior.issuer.request_timeout, rv);
+            process_int___(issuer, ctx, "max_redirects", &cfg->c->behavior.issuer.max_redirects, rv);
+            process_enum__(issuer, ctx, "tls_version", (int *) &cfg->c->behavior.issuer.tls_version, tls_map, rv);
+            process_string(issuer, ctx, "ca_bundle_path", &cfg->c->behavior.issuer.ca_bundle_path, rv);
+
+            mtls = process_obj(obj, ctx, "mtls");
+            if (mtls) {
+                process_string(mtls, ctx, "cert_path", &cfg->c->behavior.issuer.mtls.cert_path, rv);
+                process_string(mtls, ctx, "private_key_path", &cfg->c->behavior.issuer.mtls.private_key_path, rv);
+                end_obj(ctx);
+            }
             end_obj(ctx);
         }
 
@@ -427,7 +491,8 @@ static XAcode finalize(struct config_building *cfg, XAcode *rv)
 {
     size_t tmp = 0;
 
-    tmp                              = hashmap_num_entries(&cfg->interfaces);
+    tmp = hashmap_num_entries(&cfg->interfaces);
+
     cfg->c->behavior.interface_count = tmp;
     cfg->c->behavior.interfaces      = must_calloc(sizeof(struct interface), tmp);
 
@@ -435,9 +500,10 @@ static XAcode finalize(struct config_building *cfg, XAcode *rv)
     hashmap_iterate_pairs(&cfg->interfaces, &copy_interfaces, cfg);
     hashmap_destroy(&cfg->interfaces);
 
-    cfg->i                                 = 0;
-    cfg->failed                            = false;
-    tmp                                    = hashmap_num_entries(&cfg->jwt_algs);
+    cfg->i      = 0;
+    cfg->failed = false;
+    tmp         = hashmap_num_entries(&cfg->jwt_algs);
+
     cfg->c->behavior.dns_txt.jwt.alg_count = tmp;
     hashmap_iterate_pairs(&cfg->jwt_algs, &copy_jwts, cfg);
 

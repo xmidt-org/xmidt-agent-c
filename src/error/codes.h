@@ -12,26 +12,27 @@
  */
 typedef enum {
     XA_OK = 0,
-    XA_OUT_OF_MEMORY,         /*  1 */
-    XA_DNS_FORMAT_ERROR,      /*  2 */
-    XA_DNS_SERVER_ERROR,      /*  3 */
-    XA_DNS_NAME_ERROR,        /*  4 */
-    XA_DNS_NOT_IMPLEMENTED,   /*  5 */
-    XA_DNS_REFUSED,           /*  6 */
-    XA_DNS_UNKNOWN_VALUE,     /*  7 */
-    XA_DNS_TOO_FEW_ANSWERS,   /*  8 */
-    XA_DNS_RESOLVER_ERROR,    /*  9 */
-    XA_JWT_DECODE_ERROR,      /* 10 */
-    XA_INVALID_INPUT,         /* 11 */
-    XA_DNS_RECORD_TOO_SHORT,  /* 12 */
-    XA_DNS_RECORD_INVALID,    /* 13 */
-    XA_DNS_TOKEN_NOT_PRESENT, /* 14 */
-    XA_NOT_A_DIR,             /* 15 */
-    XA_PATH_TOO_LONG,         /* 16 */
-    XA_FAILED_TO_OPEN_FILE,   /* 17 */
-    XA_FAILED_TO_READ_FILE,   /* 18 */
-    XA_CLI_ERROR,             /* 19 */
-    XA_CONFIG_FILE_ERROR,     /* 20 */
+    XA_OUT_OF_MEMORY,          /*  1 */
+    XA_DNS_FORMAT_ERROR,       /*  2 */
+    XA_DNS_SERVER_ERROR,       /*  3 */
+    XA_DNS_NAME_ERROR,         /*  4 */
+    XA_DNS_NOT_IMPLEMENTED,    /*  5 */
+    XA_DNS_REFUSED,            /*  6 */
+    XA_DNS_UNKNOWN_VALUE,      /*  7 */
+    XA_DNS_TOO_FEW_ANSWERS,    /*  8 */
+    XA_DNS_RESOLVER_ERROR,     /*  9 */
+    XA_JWT_DECODE_ERROR,       /* 10 */
+    XA_INVALID_INPUT,          /* 11 */
+    XA_DNS_RECORD_TOO_SHORT,   /* 12 */
+    XA_DNS_RECORD_INVALID,     /* 13 */
+    XA_DNS_TOKEN_NOT_PRESENT,  /* 14 */
+    XA_NOT_A_DIR,              /* 15 */
+    XA_PATH_TOO_LONG,          /* 16 */
+    XA_FAILED_TO_OPEN_FILE,    /* 17 */
+    XA_FAILED_TO_READ_FILE,    /* 18 */
+    XA_CLI_ERROR,              /* 19 */
+    XA_CONFIG_FILE_ERROR,      /* 20 */
+    XA_INSUFFICIENT_RESOURCES, /* 21 */
 
     XA_LAST /* never use! */
 } XAcode;
@@ -45,5 +46,11 @@ typedef enum {
  * return xa_set_error(err, XA_OUT_OF_MEMORY);
  */
 XAcode xa_set_error(XAcode *err, XAcode e);
+
+
+/**
+ * Convert the XAcode into a string for logging purposes.
+ */
+const char *xa_error_to_string(XAcode e);
 
 #endif

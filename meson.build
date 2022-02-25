@@ -136,6 +136,11 @@ if get_option('tests')
                 'src/cli/config.c'],
       'deps': [ all_dep ],
     },
+    'test_codes': {
+      'srcs': [ 'tests/test_codes.c',
+                'src/error/codes.c' ],
+      'deps': [ cunit_dep ],
+    },
     'test_config': {
       'srcs': [ 'tests/test_config.c',
                 'src/config/cfg_file.c',

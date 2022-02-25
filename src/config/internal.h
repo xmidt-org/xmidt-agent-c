@@ -10,8 +10,6 @@
 #include "../error/codes.h"
 #include "config.h"
 
-#define CTX_MAX_DEPTH 4
-
 struct cfg_file {
     char *filename;
 

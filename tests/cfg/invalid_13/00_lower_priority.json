@@ -1,0 +1,40 @@
+{
+    "identity": {
+        "device_id": "mac:665544332211",
+        "partner_id": "ignored"
+    },
+
+    "hardware": {
+        "model": "ignored",
+        "serial_number": "ignored",
+        "manufacturer": "ignored",
+        "last_reboot_reason": "ignored"
+    },
+
+    "firmware": {
+        "name": "ignored"
+    },
+
+    "behavior": {
+        "url": "ignored",
+        "ping_timeout": 42,
+        "backoff_max": 42,
+        "interfaces": [ { "name": "wan0", "cost": 199 } ],
+        "force_ip": 6,
+        "dns_txt": {
+            "base_fqdn": "ignored",
+            "jwt": {
+                "allowed_algs": [],
+                "keys_dir": "ignored"
+            }
+        },
+
+        "issuer": {
+            "tls_version": "max",
+            "url": "ignored",
+            "mtls": {
+                "cert_path": -1
+            }
+        }
+    }
+}

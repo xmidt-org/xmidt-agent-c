@@ -4,6 +4,7 @@
 #include <cutils/file.h>
 #include <cutils/hashmap.h>
 #include <cutils/memory.h>
+#include <cutils/printf.h>
 #include <cutils/strings.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -24,7 +25,6 @@
 /*----------------------------------------------------------------------------*/
 /*                               Data Structures                              */
 /*----------------------------------------------------------------------------*/
-/* none */
 struct config_ctx {
     const char *filename;
     size_t depth;
@@ -67,40 +67,21 @@ static const struct config_map tls_map[] = {
 static void output_error(const struct config_ctx *ctx, const char *name,
                          const char *type)
 {
-    switch (ctx->depth) {
-#if (1 < CTX_MAX_DEPTH)
-        case 1:
-            log_fatal("Error in file: %s in object '.%s.%s' is not a %s.",
-                      ctx->filename, ctx->obj[0], name, type);
-            break;
-#endif
-#if (2 < CTX_MAX_DEPTH)
-        case 2:
-            log_fatal("Error in file: %s in object '.%s.%s.%s' is not a %s.",
-                      ctx->filename, ctx->obj[0], ctx->obj[1], name, type);
-            break;
-#endif
-#if (3 < CTX_MAX_DEPTH)
-        case 3:
-            log_fatal("Error in file: %s in object '.%s.%s.%s.%s' is not a %s.",
-                      ctx->filename, ctx->obj[0], ctx->obj[1],
-                      ctx->obj[2], name, type);
-            break;
-#endif
-#if (4 < CTX_MAX_DEPTH)
-        case 4:
-            log_fatal("Error in file: %s in object '.%s.%s.%s.%s.%s' is not a %s.",
-                      ctx->filename, ctx->obj[0], ctx->obj[1],
-                      ctx->obj[2], ctx->obj[3], name, type);
-            break;
-#endif
-        default:
-            log_fatal("depth: %d\n", ctx->depth);
-            /* This is really a bug at build time, but this is still a nice
-             * sanity check. */
-            log_fatal("%s unknown error related to %s and %s",
-                      ctx->filename, name, type);
-            abort();
+    char *obj = NULL;
+    for (int i = ctx->depth - 1; 0 < i; i--) {
+        if (!obj) {
+            obj = must_maprintf(".%s", ctx->obj[i]);
+        } else {
+            char *tmp = must_maprintf(".%s%s", ctx->obj[i], obj);
+            free(obj);
+            obj = tmp;
+        }
+    }
+    log_fatal("Error in file: %s in object '%s' is not %s.",
+              ctx->filename, obj, name, type);
+
+    if (obj) {
+        free(obj);
     }
 }
 
@@ -117,7 +98,7 @@ static XAcode process_string(const cJSON *json, const struct config_ctx *ctx,
 
     if (val) {
         if (val->type != cJSON_String) {
-            output_error(ctx, name, "string");
+            output_error(ctx, name, "a string");
             *rv = XA_CONFIG_FILE_ERROR;
             return *rv;
         }
@@ -148,7 +129,7 @@ static XAcode process_int___(const cJSON *json, const struct config_ctx *ctx,
         if (val->type == cJSON_Number) {
             *dest = val->valueint;
         } else {
-            output_error(ctx, name, "number");
+            output_error(ctx, name, "a number");
             *rv = XA_CONFIG_FILE_ERROR;
             return *rv;
         }
@@ -171,7 +152,7 @@ static XAcode process_enum__(const cJSON *json, const struct config_ctx *ctx,
 
     if (val) {
         if (val->type != cJSON_String) {
-            output_error(ctx, name, "enum");
+            output_error(ctx, name, "an enum");
             *rv = XA_CONFIG_FILE_ERROR;
             return *rv;
         }
@@ -187,7 +168,7 @@ static XAcode process_enum__(const cJSON *json, const struct config_ctx *ctx,
             if (map[i].s) {
                 *dest = map[i].val;
             } else {
-                output_error(ctx, name, "enum");
+                output_error(ctx, name, "an enum");
                 *rv = XA_CONFIG_FILE_ERROR;
             }
         }
@@ -209,7 +190,7 @@ static XAcode process_jwt_alg_array(const cJSON *json, const struct config_ctx *
     }
 
     if (val->type != cJSON_Array) {
-        output_error(ctx, name, "array[string]");
+        output_error(ctx, name, "an array[string]");
         *rv = XA_CONFIG_FILE_ERROR;
         return *rv;
     }
@@ -219,7 +200,7 @@ static XAcode process_jwt_alg_array(const cJSON *json, const struct config_ctx *
         const cJSON *item = cJSON_GetArrayItem(val, i);
 
         if (item->type != cJSON_String) {
-            output_error(ctx, name, "array[string]");
+            output_error(ctx, name, "an array[string]");
             *rv = XA_CONFIG_FILE_ERROR;
         } else {
             struct xa_string tmp;
@@ -253,6 +234,7 @@ static const cJSON *process_obj(const cJSON *json, struct config_ctx *ctx,
         }
         ctx->obj[ctx->depth] = name;
         ctx->depth++;
+        log_info("ctx->depth: %d\n", ctx->depth);
     }
 
     return obj;
@@ -282,7 +264,7 @@ static XAcode process_interfaces(const cJSON *json, struct config_ctx *ctx,
     }
 
     if (obj->type != cJSON_Array) {
-        output_error(ctx, "interfaces", "array");
+        output_error(ctx, "interfaces", "an array");
         *rv = XA_CONFIG_FILE_ERROR;
     } else {
         int len = cJSON_GetArraySize(obj);
@@ -435,7 +417,7 @@ static XAcode json_to_config(const cJSON *json, struct config_ctx *ctx,
             process_enum__(issuer, ctx, "tls_version", (int *) &cfg->c->behavior.issuer.tls_version, tls_map, rv);
             process_string(issuer, ctx, "ca_bundle_path", &cfg->c->behavior.issuer.ca_bundle_path, rv);
 
-            mtls = process_obj(obj, ctx, "mtls");
+            mtls = process_obj(issuer, ctx, "mtls");
             if (mtls) {
                 process_string(mtls, ctx, "cert_path", &cfg->c->behavior.issuer.mtls.cert_path, rv);
                 process_string(mtls, ctx, "private_key_path", &cfg->c->behavior.issuer.mtls.private_key_path, rv);
@@ -466,7 +448,6 @@ static XAcode file_to_config(const char *filename, struct config_building *cfg,
     memset(&ctx, 0, sizeof(struct config_ctx));
     ctx.filename = filename;
 
-    *rv = XA_OK;
     if (0 != freadall(filename, 0, (void **) &data, &len)) {
         *rv = XA_FAILED_TO_OPEN_FILE;
         return *rv;
@@ -606,7 +587,11 @@ void config_destroy(config_t *c)
 
         free_string(&c->behavior.dns_txt.jwt.keys_dir);
 
+        free_string(&c->behavior.issuer.ca_bundle_path);
         free_string(&c->behavior.issuer.url);
+
+        free_string(&c->behavior.issuer.mtls.cert_path);
+        free_string(&c->behavior.issuer.mtls.private_key_path);
 
         free(c);
     }

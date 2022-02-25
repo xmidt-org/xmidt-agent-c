@@ -1,0 +1,38 @@
+{
+    "identity": {
+        "device_id": "mac:112233445566",
+        "partner_id": "my_friend"
+    },
+
+    "hardware": {
+        "model": "MODEL_NAME",
+        "serial_number": "SERIAL_NUMBER",
+        "manufacturer": "MANUFACTURER_NAME",
+        "last_reboot_reason": "REASON"
+    },
+
+    "firmware": {
+        "name": "NAME"
+    },
+
+    "behavior": {
+        "url": "URL",
+        "ping_timeout": 90,
+        "backoff_max": 250,
+        "interfaces": [ { "name": "wan0", "cost": 99 },
+                        { "name": "eth0", "cost": 10 } ],
+        "force_ip": 4,
+        "dns_txt": {
+            "base_fqdn": "xmidt.example.com",
+            "jwt": {
+                "allowed_algs": [ "HS256", "RS256" ],
+                "keys_dir": "keys_dir"
+            }
+        },
+
+        "issuer": {
+            "url": "issuer.example.com",
+            "tls_version": "max"
+        }
+    }
+}

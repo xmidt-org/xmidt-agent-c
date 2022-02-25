@@ -89,7 +89,11 @@ static void _log(enum level level, const char *format, va_list args)
     char ts[32];
     time_t now;
     struct tm utc;
-    char *payload = NULL;
+    char *payload      = NULL;
+    const char *no_mem = "Memory allocation failure during logging.";
+    const char *p      = no_mem;
+
+    const struct log_opts *opt = &_opts[level];
 
     /* Generate an RFC3339 timestamp string */
     time(&now);
@@ -98,10 +102,14 @@ static void _log(enum level level, const char *format, va_list args)
 
     payload = mvaprintf(format, args);
     if (payload) {
-        const struct log_opts *opt = &_opts[level];
-        fprintf(stdout, "%s%s\x1b[0m | %s%s\x1b[0m | %s%s\x1b[0m\n",
-                opt->ts_color, ts, opt->level_color, opt->level,
-                opt->payload_color, payload);
+        p = payload;
+    }
+
+    fprintf(stdout, "%s%s\x1b[0m | %s%s\x1b[0m | %s%s\x1b[0m\n",
+            opt->ts_color, ts, opt->level_color, opt->level,
+            opt->payload_color, p);
+
+    if (payload) {
         free(payload);
     }
 }
@@ -114,7 +122,7 @@ void log_trace(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(TRACE, format, args);
+    log_va_trace(format, args);
     va_end(args);
 }
 
@@ -124,7 +132,7 @@ void log_debug(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(DEBUG, format, args);
+    log_va_debug(format, args);
     va_end(args);
 }
 
@@ -134,7 +142,7 @@ void log_info(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(INFO, format, args);
+    log_va_info(format, args);
     va_end(args);
 }
 
@@ -144,7 +152,7 @@ void log_warn(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(WARN, format, args);
+    log_va_warn(format, args);
     va_end(args);
 }
 
@@ -154,7 +162,7 @@ void log_error(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(ERROR, format, args);
+    log_va_error(format, args);
     va_end(args);
 }
 
@@ -164,7 +172,7 @@ void log_fatal(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    _log(FATAL, format, args);
+    log_va_fatal(format, args);
     va_end(args);
 }
 
